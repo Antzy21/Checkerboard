@@ -7,9 +7,9 @@ module Square =
         let x, y = square.coordinates
         sprintf "%c%d" ['a'..'h'].[x] (y+1)
     let getFromName (name: string) : square<'Piece> =
-        let c, i = name[0], System.Char.GetNumericValue name[1] |> int
-        let j = List.findIndex (fun letter -> letter = c) ['a'..'h']
-        {piece = None; coordinates = (i, j)}
+        let j, c = System.Char.GetNumericValue name[1] |> int, name[0]
+        let i = List.findIndex (fun letter -> letter = c) ['a'..'h']
+        {piece = None; coordinates = (i, j-1)}
 
     let getPiece (square: square<'piece>) : 'piece =
         match square.piece with
