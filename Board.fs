@@ -75,7 +75,8 @@ module Board =
                 ]
             |> afterShifts start.coordinates board
 
-    let movePiece (startingSquare: square<'Piece>) (endingSquare: square<'Piece>) (board: board<'Piece>) : board<'Piece> =
+    let movePiece (move: move<'Piece>) (board: board<'Piece>) : board<'Piece> =
+        let (startingSquare, endingSquare) = move
         let newBoard = Array2D.copy board
         let x0, y0 = startingSquare.coordinates
         let x1, y1 = endingSquare.coordinates
