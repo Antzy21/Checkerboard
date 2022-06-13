@@ -10,20 +10,20 @@ module Board =
             )
 
     module getSquares =
-        let private isOnBoard (position: int * int) (board: board<'Piece>) : bool =
+        let private isOnBoard (position: coordinates) (board: board<'Piece>) : bool =
             let x, y = position
             x >= 0 && x < Array2D.length1 board && y >= 0 && y < Array2D.length2 board
-        let afterShift (shift: int * int) (start: int * int) (board: board<'Piece>) : square<'Piece> option =
+        let afterShift (shift: int * int) (start: coordinates) (board: board<'Piece>) : square<'Piece> option =
             let (i, j), (x, y) = shift, start
             if isOnBoard (x+i, y+j) board then
                 Some board.[x+i,y+j]
             else None
-        let afterShifts (start: int * int) (board: board<'Piece>) (shifts: (int*int) list) : square<'Piece> list =
+        let afterShifts (start: coordinates) (board: board<'Piece>) (shifts: (int*int) list) : square<'Piece> list =
             shifts
             |> List.map (fun shift -> afterShift shift start board)
             |> List.filter Option.isSome
             |> List.map Option.get
-        let rec afterRepeatedShift (shift: int * int) (start: int * int) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
+        let rec afterRepeatedShift (shift: int * int) (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
             match afterShift shift start board with
             | None -> []
             | Some square ->
@@ -44,7 +44,7 @@ module Board =
             |> List.fold (fun s direction ->
                 s |> List.append (afterRepeatedShift direction start.coordinates stopAt board)
             ) List.empty<square<'Piece>>
-        let afterAllShiftDirections (start: square<'Piece>) (i: int) (j: int) (board: board<'Piece>) : square<'Piece> list =
+        let afterAllShiftDirections (start: square<'Piece>) ((i, j) : int * int) (board: board<'Piece>) : square<'Piece> list =
             if i = 0 || j = 0 then
                 [
                     (j+i,0);
@@ -74,6 +74,9 @@ module Board =
                     (-y,-x)
                 ]
             |> afterShifts start.coordinates board
+        
+    let getSquare ((i, j): coordinates) (board: board<'Piece>) : square<'Piece> =
+        board.[i,j]
 
     let movePiece (move: move<'Piece>) (board: board<'Piece>) : board<'Piece> =
         let (startingSquare, endingSquare) = move
