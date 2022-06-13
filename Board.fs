@@ -91,5 +91,6 @@ module Board =
         let (startingSquare, endingSquare) = move
         let piece = Square.getPiece startingSquare
         board
-        |> removePiece startingSquare.coordinates
+        |> Array2D.copy
         |> updateWithPiece endingSquare.coordinates piece
+        |> removePiece startingSquare.coordinates
