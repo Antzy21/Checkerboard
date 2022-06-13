@@ -77,6 +77,9 @@ module Board =
         
     let getSquare ((i, j): coordinates) (board: board<'Piece>) : square<'Piece> =
         board.[i,j]
+    let getSquareFromCoordinatesName (name: string) (board: board<'Piece>) : square<'Piece> =
+        let coordinates = name |> Coordinates.fromName
+        getSquare coordinates board
 
     let movePiece (move: move<'Piece>) (board: board<'Piece>) : board<'Piece> =
         let (startingSquare, endingSquare) = move
