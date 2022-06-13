@@ -81,12 +81,15 @@ module Board =
         let coordinates = name |> Coordinates.fromName
         getSquare coordinates board
 
+    let updateWithPiece ((i,j): coordinates)  (piece: 'Piece) (board: board<'Piece>) : board<'Piece> =
+        board[i,j] <- {piece = Some piece; coordinates = (i,j)}
+        board
+    let removePiece ((i,j): coordinates) (board: board<'Piece>) : board<'Piece> =
+        board[i,j] <- {piece = None; coordinates = (i,j)}
+        board
     let movePiece (move: move<'Piece>) (board: board<'Piece>) : board<'Piece> =
         let (startingSquare, endingSquare) = move
-        let newBoard = Array2D.copy board
-        let x0, y0 = startingSquare.coordinates
-        let x1, y1 = endingSquare.coordinates
         let piece = Square.getPiece startingSquare
-        newBoard.[x0,y0] <- Square.removePiece startingSquare
-        newBoard.[x1,y1] <- Square.updateWithPiece piece endingSquare 
-        newBoard
+        board
+        |> removePiece startingSquare.coordinates
+        |> updateWithPiece endingSquare.coordinates piece
