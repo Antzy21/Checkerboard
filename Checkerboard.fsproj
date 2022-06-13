@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Coordinates.fs" />
     <Compile Include="Square.fs" />
     <Compile Include="Move.fs" />
     <Compile Include="Board.fs" />
