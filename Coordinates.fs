@@ -8,4 +8,4 @@ module Coordinates =
     let fromName (name: string) : coordinates =
         let j, c = System.Char.GetNumericValue name[1] |> int, name[0]
         let i = List.findIndex (fun letter -> letter = c) ['a'..'z']
-        (i, j)
+        (i, j-1)
