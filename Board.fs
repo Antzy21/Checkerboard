@@ -81,6 +81,11 @@ module Board =
         let coordinates = name |> Coordinates.fromName
         getSquare coordinates board
 
+    let hasPieceOnSquare (squareName : string) (piece: 'Piece) (board : board<'Piece>) : bool =
+        getSquareFromCoordinatesName squareName board
+        |> fun square -> square.piece
+        |> (=) <| Some piece
+
     let updateWithPiece ((i,j): coordinates)  (piece: 'Piece) (board: board<'Piece>) : board<'Piece> =
         board[i,j] <- {piece = Some piece; coordinates = (i,j)}
         board
