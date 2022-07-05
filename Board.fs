@@ -44,6 +44,8 @@ module Board =
             |> List.fold (fun s direction ->
                 s |> List.append (afterRepeatedShift direction start.coordinates stopAt board)
             ) List.empty<square<'Piece>>
+        let getRowAndFileAndDiagonals (start: square<'Piece>) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
+            List.append (getRowAndFile start stopAt board) (getDiagonals start stopAt board)            
         let afterAllShiftDirections (start: square<'Piece>) ((i, j) : int * int) (board: board<'Piece>) : square<'Piece> list =
             if i = 0 || j = 0 then
                 [
