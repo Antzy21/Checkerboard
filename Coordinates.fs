@@ -9,3 +9,5 @@ module Coordinates =
         let j, c = System.Char.GetNumericValue name[1] |> int, name[0]
         let i = List.findIndex (fun letter -> letter = c) ['a'..'z']
         (i, j-1)
+    let afterShift ((i, j): int * int) ((x,y): coordinates) : coordinates =
+        (x+i, y+j)
