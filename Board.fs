@@ -88,6 +88,14 @@ module Board =
         let onRowFileAndDiagonals (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
             List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)            
         
+    module GetPiece =
+        let fromCoordinates (coordinates: coordinates) (board: board<'Piece>) : 'Piece option =
+            GetSquare.fromCoordinates coordinates board
+            |> fun sqr -> sqr.piece
+        let fromCoordinatesName (name: string) : board<'Piece> -> 'Piece option =
+            Coordinates.fromName name
+            |> fromCoordinates
+        
     let hasPieceOnSquare (squareName : string) (piece: 'Piece) (board : board<'Piece>) : bool =
         GetSquare.fromCoordinatesName squareName board
         |> fun square -> square.piece
