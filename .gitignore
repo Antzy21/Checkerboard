@@ -1,3 +1,5 @@
 /Checkerboard/bin
 /Checkerboard/obj
 /.vs
+/Checkerboard.Tests/obj
+/Checkerboard.Tests/bin/Debug/net6.0
