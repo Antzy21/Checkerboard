@@ -1,8 +1,8 @@
 # Checkerboard
 
 This library is for creating, modifying and accessing a checkboard.
-A checkboard is a 2D grid of squares, and games that use a checkboard typically have pieces that are places in the squares avaiable.
-Checkerboard is written functionally in F# and does not reply on external packages.
+A checkboard is a 2D grid of squares, and games that use a checkboard typically have pieces that are placed in the squares avaiable, e.g. Chess, Checkers.
+Checkerboard is written functionally in F# and does not rely on external packages.
 
 ## Types and Modules
 
