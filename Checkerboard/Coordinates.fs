@@ -23,3 +23,5 @@ module Coordinates =
         _ -> None
     let afterShift ((i, j): int * int) ((x,y): coordinates) : coordinates =
         (x+i, y+j)
+    let getShiftBetween ((x1,y1): coordinates) ((x2,y2): coordinates) : coordinates =
+        (x2 - x1, y2 - y1)
