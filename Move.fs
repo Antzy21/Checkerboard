@@ -6,7 +6,7 @@ module Move =
     let getShift (move: move<'Piece>) : int * int =
         let start = (fst move).coordinates
         let finish = (snd move).coordinates
-        (fst start - fst finish, snd start - snd finish)
+        (fst finish - fst start, snd finish - snd start)
     let getPieceAtDestination (move: move<'Piece>) : 'Piece option =
         snd move
         |> fun square -> square.piece
