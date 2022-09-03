@@ -3,12 +3,18 @@
 type coordinates = int * int
 
 module Coordinates =
+    let rec private numberToAlphabet (n: int) : string =
+        if n%26 = n then ""
+        else numberToAlphabet (n/26-1)
+        + string (['a'..'z'].[n%26])
     let getName ((i,j) : coordinates) : string =
-        sprintf "%c%d" ['a'..'z'].[i] (j+1)
+        sprintf "%s%d" (numberToAlphabet i) (j+1)
     let fromName (name: string) : coordinates =
-        let j, c = System.Char.GetNumericValue name[1] |> int, name[0]
-        let i = List.findIndex (fun letter -> letter = c) ['a'..'z']
-        (i, j-1)
+        let startOfNum = Seq.findIndex (fun c -> System.Char.IsDigit(c)) name
+        let chars, num = name.[..startOfNum-1], name.[startOfNum..]
+        let i = Seq.fold (fun s c -> 26 * s + List.findIndex ((=) c) ['a'..'z']+1) 0 chars
+        let j = num |> int
+        (i-1, j-1)
     let tryParse (name: string) : coordinates option =
         try
             fromName name 
