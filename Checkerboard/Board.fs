@@ -112,3 +112,6 @@ module Board =
         let applyMove ((startingSquare, endingSquare): move<'Piece>) (board: board<'Piece>) =
             Square.withPieceOption endingSquare.coordinates startingSquare.piece board
             Square.removePiece startingSquare.coordinates board
+        let undoMove ((startingSquare, endingSquare): move<'Piece>) (board: board<'Piece>) =
+            Square.withPieceOption endingSquare.coordinates endingSquare.piece board
+            Square.withPieceOption startingSquare.coordinates startingSquare.piece board
