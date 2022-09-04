@@ -103,12 +103,12 @@ module Board =
 
     module Update =
         module Square =
-            let withPiece ((i,j): coordinates) (piece: 'Piece) (board: board<'Piece>) =
-                board[i,j] <- {piece = Some piece; coordinates = (i,j)}
+            let withPieceOption ((i,j): coordinates) (piece: 'Piece option) (board: board<'Piece>) =
+                board[i,j] <- {piece = piece; coordinates = (i,j)}
+            let withPiece (coordinates: coordinates) (piece: 'Piece) (board: board<'Piece>) =
+                withPieceOption coordinates (Some piece) board
             let removePiece ((i,j): coordinates) (board: board<'Piece>) =
                 board[i,j] <- {piece = None; coordinates = (i,j)}
-        let applyMove (move: move<'Piece>) (board: board<'Piece>) =
-            let (startingSquare, endingSquare) = move
-            let piece = Square.getPiece startingSquare
-            Square.withPiece endingSquare.coordinates piece board
+        let applyMove ((startingSquare, endingSquare): move<'Piece>) (board: board<'Piece>) =
+            Square.withPieceOption endingSquare.coordinates startingSquare.piece board
             Square.removePiece startingSquare.coordinates board
