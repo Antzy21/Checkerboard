@@ -7,7 +7,7 @@ open Xunit
 [<Fact>]
 let ``getShift`` () =
     let result = Move.getShift Moves.example1
-    Assert.Equal((-2, 2), result)
+    Assert.Equal((2, -2), result)
     
 [<Fact>]
 let ``getMovedPiece`` () =
@@ -16,5 +16,5 @@ let ``getMovedPiece`` () =
     
 [<Fact>]
 let ``getDestinationPiece`` () =
-    let result = Move.getPieceAtDestination Moves.example1
+    let result = Move.getPieceAtDestination Moves.example2
     Assert.Equal(Some Pieces.example2, result)

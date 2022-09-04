@@ -16,12 +16,13 @@ module Pieces =
 module Moves =
 
     let example1 =
-        {piece = Some Pieces.example1; coordinates = Coordinates._5_0},
-        {piece = Some Pieces.example2; coordinates = Coordinates._3_2}
+        {piece = Some Pieces.example1; coordinates = Coordinates._3_2},
+        {piece = None; coordinates = Coordinates._5_0}
 
     let example2 =
         {piece = Some Pieces.example1; coordinates = Coordinates._3_2},
-        {piece = None; coordinates = Coordinates._5_0}
+        {piece = Some Pieces.example2; coordinates = Coordinates._5_0}
+
 
 module Boards = 
 
