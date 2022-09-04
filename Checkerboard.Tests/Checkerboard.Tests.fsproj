@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Helpers\Data.fs" />
     <Compile Include="Move.fs" />
     <Compile Include="Coordinates.fs" />
     <Compile Include="Program.fs" />
