@@ -10,8 +10,8 @@ module Board =
             )
             
     let private isOnBoard (position: coordinates) (board: board<'Piece>) : bool =
-            let x, y = position
-            x >= 0 && x < Array2D.length1 board && y >= 0 && y < Array2D.length2 board
+        let x, y = position
+        x >= 0 && x < Array2D.length1 board && y >= 0 && y < Array2D.length2 board
 
     module GetSquare =
         let fromCoordinates ((i, j): coordinates) (board: board<'Piece>) : square<'Piece> =
@@ -99,20 +99,16 @@ module Board =
     let hasPieceOnSquare (squareName : string) (piece: 'Piece) (board : board<'Piece>) : bool =
         GetSquare.fromCoordinatesName squareName board
         |> fun square -> square.piece
-        |> (=) <| Some piece
+        |> (=) (Some piece)
 
     module Update =
         module Square =
-            let withPiece ((i,j): coordinates) (piece: 'Piece) (board: board<'Piece>) : board<'Piece> =
+            let withPiece ((i,j): coordinates) (piece: 'Piece) (board: board<'Piece>) =
                 board[i,j] <- {piece = Some piece; coordinates = (i,j)}
-                board
-            let removePiece ((i,j): coordinates) (board: board<'Piece>) : board<'Piece> =
+            let removePiece ((i,j): coordinates) (board: board<'Piece>) =
                 board[i,j] <- {piece = None; coordinates = (i,j)}
-                board
-        let applyMove (move: move<'Piece>) (board: board<'Piece>) : board<'Piece> =
+        let applyMove (move: move<'Piece>) (board: board<'Piece>) =
             let (startingSquare, endingSquare) = move
             let piece = Square.getPiece startingSquare
-            board
-            |> Array2D.copy
-            |> Square.withPiece endingSquare.coordinates piece
-            |> Square.removePiece startingSquare.coordinates
+            Square.withPiece endingSquare.coordinates piece board
+            Square.removePiece startingSquare.coordinates board
