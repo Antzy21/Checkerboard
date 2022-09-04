@@ -1,7 +1,7 @@
 # Checkerboard
 
 This library is for creating, modifying and accessing a checkboard.
-A checkboard is a 2D grid of squares, and games that use a checkboard typically have pieces that are placed in the squares avaiable, e.g. Chess, Checkers.
+A checkboard is a 2D grid of squares, and games that use a checkboard typically have pieces that are placed in the squares available. e.g. Chess and Checkers.
 Checkerboard is written functionally in F# and does not rely on external packages.
 
 ## Types and Modules
@@ -14,7 +14,7 @@ The board type is a 2D array of squares of a generic piece type.
 
 ```type board<'Piece> = square<'Piece>[,]```
 
-The Board module contains submodules for creating a board, getting square(s) and updaing a board.
+The Board module contains submodules for creating a board, getting square(s) and updating a board.
 
 ### Square
 
@@ -41,4 +41,4 @@ The coordinates type is a tuple of ints.
 
 The Coordinates module can parse rank and file naming convention into coordinates.
 
-e.g "a1" = (0, 0), "c4" = (2, 3)
+e.g. "a1" = (0, 0), "c4" = (2, 3)
