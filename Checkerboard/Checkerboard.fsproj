@@ -14,8 +14,9 @@
     <RepositoryUrl>https://github.com/Antzy21/Checkerboard</RepositoryUrl>
     <PackageTags>Checkerboard; checkers; chess; board;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.2.0</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
+    <PackageReleaseNotes>New functions: getFile and getName, on Coordinates and Square modules</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
