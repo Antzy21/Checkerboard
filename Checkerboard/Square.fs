@@ -9,6 +9,10 @@ module Square =
         | Some piece -> piece
     let getCoordinates (square: square<'piece>) : coordinates =
         square.coordinates
+    let getFile (square: square<'piece>) : string =
+        square.coordinates |> Coordinates.getFile
+    let getRow (square: square<'piece>) : string =
+        square.coordinates |> Coordinates.getRow
     let getCoordinatesName (square: square<'piece>) : string =
         square.coordinates |> Coordinates.getName
     let updateWithPiece (piece: 'Piece) (square: square<'Piece>) : square<'Piece> =
