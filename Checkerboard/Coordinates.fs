@@ -7,6 +7,10 @@ module Coordinates =
         if n%26 = n then ""
         else numberToAlphabet (n/26-1)
         + string (['a'..'z'].[n%26])
+    let getFile ((i,_) : coordinates) : string =
+        numberToAlphabet i
+    let getRow ((_,j) : coordinates) : string =
+        sprintf "%d" (j+1)
     let getName ((i,j) : coordinates) : string =
         sprintf "%s%d" (numberToAlphabet i) (j+1)
     let fromName (name: string) : coordinates =
