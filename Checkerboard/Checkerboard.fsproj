@@ -14,9 +14,9 @@
     <RepositoryUrl>https://github.com/Antzy21/Checkerboard</RepositoryUrl>
     <PackageTags>Checkerboard; checkers; chess; board;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <VersionPrefix>1.2.0</VersionPrefix>
+    <VersionPrefix>1.2.1</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
-    <PackageReleaseNotes>New functions: getFile and getName, on Coordinates and Square modules</PackageReleaseNotes>
+    <PackageReleaseNotes>New function: hasPiece, on Square module</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
