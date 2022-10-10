@@ -19,3 +19,6 @@ module Square =
         {piece = Some piece; coordinates = square.coordinates}
     let removePiece (square: square<'Piece>) : square<'Piece> =
         {piece = None; coordinates = square.coordinates}
+    let hasPiece (piece: 'Piece) (square: square<'Piece>) : bool =
+        square.piece
+        |> (=) (Some piece)
