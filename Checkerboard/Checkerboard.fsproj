@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>Antzy21.Games.Checkerboard</PackageId>
     <Title>Checkerboard</Title>
@@ -14,9 +14,9 @@
     <RepositoryUrl>https://github.com/Antzy21/Checkerboard</RepositoryUrl>
     <PackageTags>Checkerboard; checkers; chess; board;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <VersionPrefix>1.2.1</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
-    <PackageReleaseNotes>New function: hasPiece, on Square module</PackageReleaseNotes>
+    <PackageReleaseNotes>Net7.0, uses INumber for customisable board size</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +35,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

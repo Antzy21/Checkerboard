@@ -26,8 +26,8 @@ module Moves =
 
 module Boards = 
 
-    let exampleSize1 : board<string> =
+    let exampleSize1 : board<string, int> =
         Board.Create.empty 1
 
-    let exampleSize6 : board<string> =
+    let exampleSize6 : board<string, int> =
         Board.Create.empty 6

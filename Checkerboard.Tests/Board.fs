@@ -6,13 +6,13 @@ open Xunit
 
 [<Fact>]
 let ``Update square with piece`` () =
-    let board : board<string> = Board.Create.empty 6
+    let board : board<string, int> = Board.Create.empty 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
     Assert.Equal(board.[3,2], {piece = Some Pieces.example1; coordinates = Coordinates._3_2})
 
 [<Fact>]
 let ``Apply move to board`` () =
-    let board : board<string> = Board.Create.empty 6
+    let board : board<string, int> = Board.Create.empty 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
     Board.Update.applyMove Moves.example2 board
     Assert.Equal(board.[3,2], {piece = None; coordinates = Coordinates._3_2})
@@ -20,7 +20,7 @@ let ``Apply move to board`` () =
     
 [<Fact>]
 let ``Apply capture move to board`` () =
-    let board : board<string> = Board.Create.empty 6
+    let board : board<string, int> = Board.Create.empty 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
     Board.Update.Square.withPiece Coordinates._5_0 Pieces.example2 board
     Board.Update.applyMove Moves.example1 board
@@ -29,7 +29,7 @@ let ``Apply capture move to board`` () =
     
 [<Fact>]
 let ``Undo move on board`` () =
-    let board : board<string> = Board.Create.empty 6
+    let board : board<string, int> = Board.Create.empty 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
     Board.Update.applyMove Moves.example1 board
     Board.Update.undoMove Moves.example1 board
@@ -38,7 +38,7 @@ let ``Undo move on board`` () =
     
 [<Fact>]
 let ``Undo capture move on board`` () =
-    let board : board<string> = Board.Create.empty 6
+    let board : board<string, int> = Board.Create.empty 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
     Board.Update.applyMove Moves.example2 board
     Board.Update.undoMove Moves.example2 board

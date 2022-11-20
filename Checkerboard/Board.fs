@@ -1,53 +1,57 @@
 ﻿namespace Checkerboard
 
-type board<'Piece> = square<'Piece>[,]
+open System.Numerics
+
+type board<'Piece, 'Size when 'Size :> INumber<'Size>> = square<'Piece, 'Size>[,]
 
 module Board =
     module Create =
-        let empty (size: int) : board<'Piece> =
-            Array2D.init size size (fun i j ->
-                {piece = None; coordinates = (i, j)}
+        let empty (size: 'Size when 'Size :> INumber<'Size>) : board<'Piece, 'Size> =
+            let intSize = (INumber.CreateTruncating(size))
+            Array2D.init intSize intSize (fun i j ->
+                {piece = None; coordinates = Coordinates.createTruncating (i, j)}
             )
             
-    let private isOnBoard (position: coordinates) (board: board<'Piece>) : bool =
-        let x, y = position
-        x >= 0 && x < Array2D.length1 board && y >= 0 && y < Array2D.length2 board
+    let private isOnBoard (position: coordinates<'Size>) (board: board<'Piece, 'Size>) : bool =
+        let x, y = Coordinates.createTruncating position
+        x >= 'Size.Zero && x < 'Size.CreateChecked(Array2D.length1 board) && y >= 'Size.Zero && y < 'Size.CreateChecked(Array2D.length2 board)
 
     module GetSquare =
-        let fromCoordinates ((i, j): coordinates) (board: board<'Piece>) : square<'Piece> =
-            board.[i,j]
-        let fromCoordinatesName (name: string) : board<'Piece> -> square<'Piece> =
-            Coordinates.fromName name
+        let fromCoordinates (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
+            let (i,j) = Coordinates.createTruncating c
+            board.[int(i),int(j)]
+        let fromCoordinatesName (name: string) : board<'Piece, 'Size> -> square<'Piece, 'Size> =
+            Coordinates.parse name
             |> fromCoordinates
-        let afterShift (shift: int * int) (start: coordinates) (board: board<'Piece>) : square<'Piece> option =
-            let newCoordinates = Coordinates.afterShift shift start
+        let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
+            let newCoordinates = Coordinates.afterShift<'Size> shift start
             if isOnBoard newCoordinates board then
                 Some <| fromCoordinates newCoordinates board
             else None        
 
     module GetSquares =
-        let fromCoordinates (coordinatesList : coordinates list) (board: board<'Piece>) : square<'Piece> list =
+        let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             coordinatesList
             |> List.map (fun coordinates -> GetSquare.fromCoordinates coordinates board) 
-        let afterShifts (start: coordinates) (board: board<'Piece>) (shifts: (int*int) list) : square<'Piece> list =
+        let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : square<'Piece, 'Size> list =
             shifts
             |> List.map (fun shift -> GetSquare.afterShift shift start board)
             |> List.filter Option.isSome
             |> List.map Option.get
-        let rec afterRepeatedShift (shift: int * int) (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
+        let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             match GetSquare.afterShift shift start board with
             | None -> []
             | Some square ->
                 match stopAt, square.piece with
                 | Some stopAtPieceFunc, Some piece when stopAtPieceFunc piece -> [square]
                 | _ -> List.append [square] <| afterRepeatedShift shift square.coordinates stopAt board
-        let afterAllShiftDirections (start: coordinates) ((i, j) : int * int) (board: board<'Piece>) : square<'Piece> list =
-            if i = 0 || j = 0 then
+        let afterAllShiftDirections (start: coordinates<'Size>) ((i, j) : 'Size * 'Size) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
+            if i = 'Size.Zero || j = 'Size.Zero then
                 [
-                    (j+i,0);
-                    (-j-i,0);
-                    (0,i+j);
-                    (0,-i-j)
+                    (j+i,'Size.Zero);
+                    (-(j+i),'Size.Zero);
+                    ('Size.Zero,i+j);
+                    ('Size.Zero,-(i+j))
                 ]                
             elif i = j then
                 [
@@ -72,46 +76,61 @@ module Board =
                 ]
             |> afterShifts start board
         
-        let adjacent (start: coordinates) (board: board<'Piece>) : square<'Piece> list =
-            [(0,1); (1,1); (1,0); (1,-1); (0,-1); (-1,0); (-1,-1); (-1,1)]
+        let adjacent (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
+            [
+                ('Size.Zero,'Size.One);
+                ('Size.One,'Size.One);
+                ('Size.One,'Size.Zero);
+                ('Size.One,-'Size.One);
+                ('Size.Zero,-'Size.One);
+                (-'Size.One,'Size.Zero);
+                (-'Size.One,-'Size.One);
+                (-'Size.One,'Size.One)]
             |> afterShifts start board
-        let onDiagonals (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
-            [(-1,1); (1,1); (-1,-1); (1,-1)]
+        let onDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
+            [
+                (-'Size.One,'Size.One); 
+                ('Size.One,'Size.One);
+                (-'Size.One,-'Size.One);
+                ('Size.One,-'Size.One)
+            ]
             |> List.fold (fun s direction ->
                 s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece>>
-        let onRowAndFile (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
-            [(1,0); (-1,0); (0,1); (0,-1)]
+            ) List.empty<square<'Piece, 'Size>>
+        let onRowAndFile (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
+            [('Size.One,'Size.Zero); (-'Size.One,'Size.Zero); ('Size.Zero,'Size.One); ('Size.Zero,-'Size.One)]
             |> List.fold (fun s direction ->
                 s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece>>
-        let onRowFileAndDiagonals (start: coordinates) (stopAt: ('Piece -> bool) option) (board: board<'Piece>) : square<'Piece> list =
+            ) List.empty<square<'Piece, 'Size>>
+        let onRowFileAndDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)            
         
     module GetPiece =
-        let fromCoordinates (coordinates: coordinates) (board: board<'Piece>) : 'Piece option =
+        let fromCoordinates (coordinates: coordinates<'Size>) (board: board<'Piece, 'Size>) : 'Piece option =
             GetSquare.fromCoordinates coordinates board
             |> fun sqr -> sqr.piece
-        let fromCoordinatesName (name: string) : board<'Piece> -> 'Piece option =
-            Coordinates.fromName name
+        let fromCoordinatesName (name: string) : board<'Piece, 'Size> -> 'Piece option =
+            Coordinates.parse name
             |> fromCoordinates
         
-    let hasPieceOnSquare (squareName : string) (piece: 'Piece) (board : board<'Piece>) : bool =
+    let hasPieceOnSquare (squareName : string) (piece: 'Piece) (board : board<'Piece, 'Size>) : bool =
         GetSquare.fromCoordinatesName squareName board
         |> fun square -> square.piece
         |> (=) (Some piece)
 
     module Update =
         module Square =
-            let withPieceOption ((i,j): coordinates) (piece: 'Piece option) (board: board<'Piece>) =
-                board[i,j] <- {piece = piece; coordinates = (i,j)}
-            let withPiece (coordinates: coordinates) (piece: 'Piece) (board: board<'Piece>) =
+            let withPieceOption (c: coordinates<'Size>) (piece: 'Piece option) (board: board<'Piece, 'Size>) =
+                let (i,j) = Coordinates.createTruncating c
+                board[i,j] <- {piece = piece; coordinates = c}
+            let withPiece (coordinates: coordinates<'Size>) (piece: 'Piece) (board: board<'Piece, 'Size>) =
                 withPieceOption coordinates (Some piece) board
-            let removePiece ((i,j): coordinates) (board: board<'Piece>) =
-                board[i,j] <- {piece = None; coordinates = (i,j)}
-        let applyMove ((startingSquare, endingSquare): move<'Piece>) (board: board<'Piece>) =
+            let removePiece (c: coordinates<'Size>) (board: board<'Piece, 'Size>) =
+                let (i,j) = Coordinates.createTruncating c
+                board[i,j] <- {piece = None; coordinates = c}
+        let applyMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
             Square.withPieceOption endingSquare.coordinates startingSquare.piece board
             Square.removePiece startingSquare.coordinates board
-        let undoMove ((startingSquare, endingSquare): move<'Piece>) (board: board<'Piece>) =
+        let undoMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
             Square.withPieceOption endingSquare.coordinates endingSquare.piece board
             Square.withPieceOption startingSquare.coordinates startingSquare.piece board
