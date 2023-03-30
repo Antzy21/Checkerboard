@@ -6,12 +6,12 @@ open FSharp.Extensions
 type board<'Piece, 'Size when 'Size :> INumber<'Size>> = square<'Piece, 'Size>[,]
 
 module Board =
-    module Create =
-        let empty (size: 'Size when 'Size :> INumber<'Size>) : board<'Piece, 'Size> =
-            let intSize = (INumber.CreateTruncating(size))
-            Array2D.init intSize intSize (fun i j ->
-                {piece = None; coordinates = Coordinates.createTruncating (i, j)}
-            )
+
+    let init (size: 'Size when 'Size :> INumber<'Size>) : board<'Piece, 'Size> =
+        let intSize = (INumber.CreateTruncating(size))
+        Array2D.init intSize intSize (fun i j ->
+            {piece = None; coordinates = Coordinates.createTruncating (i, j)}
+        )
             
     let private isOnBoard (position: coordinates<'Size>) (board: board<'Piece, 'Size>) : bool =
         let x, y = Coordinates.createTruncating position
