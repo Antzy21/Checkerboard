@@ -1,6 +1,7 @@
 ﻿namespace Checkerboard
 
 open System.Numerics
+open FSharp.Extensions
 
 type square<'Piece, 'BoardSize when 'BoardSize :> INumber<'BoardSize>> = {piece: 'Piece option; coordinates: coordinates<'BoardSize>}
 

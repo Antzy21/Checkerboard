@@ -1,6 +1,7 @@
 ﻿namespace Checkerboard
 
 open System.Numerics
+open FSharp.Extensions
 
 type board<'Piece, 'Size when 'Size :> INumber<'Size>> = square<'Piece, 'Size>[,]
 
@@ -24,7 +25,7 @@ module Board =
             Coordinates.parse name
             |> fromCoordinates
         let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
-            let newCoordinates = Coordinates.afterShift<'Size> shift start
+            let newCoordinates = Coordinates.getAfterShift<'Size> shift start
             if isOnBoard newCoordinates board then
                 Some <| fromCoordinates newCoordinates board
             else None        
