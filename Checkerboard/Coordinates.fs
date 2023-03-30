@@ -5,6 +5,8 @@ open FSharp.Extensions
 
 module Coordinates =
 
+    let private alphabet = ['a'..'z']
+
     let internal createTruncating ((i, j) : coordinates<'Size1>) : coordinates<'Size2> =
         'Size2.CreateTruncating i, 'Size2.CreateTruncating j
     let rec private numberToAlphabet (n: 'Size when 'Size :> INumber<'Size>) : string =
@@ -12,7 +14,7 @@ module Coordinates =
         let x : 'Size = n % alphabetLength
         if n % alphabetLength = n then ""
         else numberToAlphabet (n/(alphabetLength-'Size.One))
-        + string (['a'..'z'].[System.Int32.CreateChecked(x)])
+        + string (alphabet.[System.Int32.CreateChecked(x)])
 
     let getFile ((i, _) : coordinates<'Size>) : string =
         numberToAlphabet i
@@ -29,7 +31,7 @@ module Coordinates =
         let chars, num = name.[..startOfNum-1], name.[startOfNum..]
         let i : 'Size = 
             Seq.fold (fun s c ->
-                26 * s + List.findIndex ((=) c) ['a'..'z']+1
+                26 * s + List.findIndex ((=) c) alphabet+1
             ) 0 chars
             |> 'Size.CreateChecked
         let j = 'Size.Parse(num, null)
