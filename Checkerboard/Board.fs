@@ -134,9 +134,10 @@ module Board =
             let removePiece (c: coordinates<'Size>) (board: board<'Piece, 'Size>) =
                 let (i,j) = Coordinates.createTruncating c
                 board[i,j] <- {piece = None; coordinates = c}
-        let applyMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
-            Square.withPieceOption endingSquare.coordinates startingSquare.piece board
-            Square.removePiece startingSquare.coordinates board
-        let undoMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
-            Square.withPieceOption endingSquare.coordinates endingSquare.piece board
-            Square.withPieceOption startingSquare.coordinates startingSquare.piece board
+    
+    let applyMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
+        Update.Square.withPieceOption endingSquare.coordinates startingSquare.piece board
+        Update.Square.removePiece startingSquare.coordinates board
+    let undoMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
+        Update.Square.withPieceOption endingSquare.coordinates endingSquare.piece board
+        Update.Square.withPieceOption startingSquare.coordinates startingSquare.piece board
