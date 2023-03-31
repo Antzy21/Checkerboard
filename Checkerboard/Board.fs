@@ -6,16 +6,21 @@ open FSharp.Extensions
 type board<'Piece, 'Size when 'Size :> INumber<'Size>> = square<'Piece, 'Size>[,]
 
 module Board =
-    module Create =
-        let empty (size: 'Size when 'Size :> INumber<'Size>) : board<'Piece, 'Size> =
-            let intSize = (INumber.CreateTruncating(size))
-            Array2D.init intSize intSize (fun i j ->
-                {piece = None; coordinates = Coordinates.createTruncating (i, j)}
-            )
+
+    let init (size: 'Size when 'Size :> INumber<'Size>) : board<'Piece, 'Size> =
+        let intSize = (INumber.CreateTruncating(size))
+        Array2D.init intSize intSize (fun i j ->
+            {piece = None; coordinates = Coordinates.createTruncating (i, j)}
+        )
             
     let private isOnBoard (position: coordinates<'Size>) (board: board<'Piece, 'Size>) : bool =
         let x, y = Coordinates.createTruncating position
         x >= 'Size.Zero && x < 'Size.CreateChecked(Array2D.length1 board) && y >= 'Size.Zero && y < 'Size.CreateChecked(Array2D.length2 board)
+    
+    let containsPiece (coords: coordinates<'Size>) (board: board<'Piece, 'Size>) : bool =
+        let i, j = Coordinates.createTruncating coords
+        board.[i,j].piece
+        |> Option.isSome
 
     module GetSquare =
         let fromCoordinates (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
@@ -25,7 +30,7 @@ module Board =
             Coordinates.parse name
             |> fromCoordinates
         let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
-            let newCoordinates = Coordinates.getAfterShift<'Size> shift start
+            let newCoordinates = Coordinates.getAfterShift shift start
             if isOnBoard newCoordinates board then
                 Some <| fromCoordinates newCoordinates board
             else None        
@@ -129,9 +134,10 @@ module Board =
             let removePiece (c: coordinates<'Size>) (board: board<'Piece, 'Size>) =
                 let (i,j) = Coordinates.createTruncating c
                 board[i,j] <- {piece = None; coordinates = c}
-        let applyMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
-            Square.withPieceOption endingSquare.coordinates startingSquare.piece board
-            Square.removePiece startingSquare.coordinates board
-        let undoMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
-            Square.withPieceOption endingSquare.coordinates endingSquare.piece board
-            Square.withPieceOption startingSquare.coordinates startingSquare.piece board
+    
+    let applyMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
+        Update.Square.withPieceOption endingSquare.coordinates startingSquare.piece board
+        Update.Square.removePiece startingSquare.coordinates board
+    let undoMove ((startingSquare, endingSquare): move<'Piece, 'Size>) (board: board<'Piece, 'Size>) =
+        Update.Square.withPieceOption endingSquare.coordinates endingSquare.piece board
+        Update.Square.withPieceOption startingSquare.coordinates startingSquare.piece board
