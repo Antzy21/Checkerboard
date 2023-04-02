@@ -3,6 +3,8 @@
 open System.Numerics
 open FSharp.Extensions
 
+type coordinates = coordinates<int>
+
 module Coordinates =
 
     let private alphabet = ['a'..'z']

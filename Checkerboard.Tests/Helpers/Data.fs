@@ -27,7 +27,7 @@ module Moves =
 module Boards = 
 
     let exampleSize1 : board<string, int> =
-        Board.Create.empty 1
+        Board.init 1
 
     let exampleSize6 : board<string, int> =
-        Board.Create.empty 6
+        Board.init 6
