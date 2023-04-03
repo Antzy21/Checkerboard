@@ -12,9 +12,9 @@ let ``getShift`` () =
 [<Fact>]
 let ``getMovedPiece`` () =
     let result = Move.getMovedPiece Moves.example1
-    Assert.Equal(Pieces.example1, result)
+    Assert.Equal(Pieces.exampleA, result)
     
 [<Fact>]
 let ``getDestinationPiece`` () =
     let result = Move.getPieceAtDestination Moves.example2
-    Assert.Equal(Some Pieces.example2, result)
+    Assert.Equal(Some Pieces.exampleB, result)
