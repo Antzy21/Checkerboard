@@ -23,9 +23,13 @@ module Board =
         |> Option.isSome
 
     module GetSquare =
-        let fromCoordinates (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
+        let fromCoordinatesOption (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
             let (i,j) = Coordinates.createTruncating c
-            board.[int(i),int(j)]
+            Array2D.tryGet (int(i), int(j)) board
+        let fromCoordinatesResult ((i, j): coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> result =
+            fromCoordinatesOption (i, j) board |> Result.fromOption $"Coordinates ({i}, {j}) are not on the board."
+        let fromCoordinates ((i, j): coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
+            fromCoordinatesResult (i, j) board |> Result.failOnError
         let fromCoordinatesName (name: string) : board<'Piece, 'Size> -> square<'Piece, 'Size> =
             Coordinates.parse name
             |> fromCoordinates
