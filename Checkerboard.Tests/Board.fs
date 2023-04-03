@@ -5,6 +5,16 @@ open Helpers.Data
 open Xunit
 
 [<Fact>]
+let ``Piece exists check`` () =
+    let board : board<string, int> = Boards.exampleSize6
+    Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
+    Assert.True(Board.containsPiece Coordinates._3_2 board)
+
+[<Fact>]
+let ``Piece does not exist check`` () =
+    Assert.False(Board.containsPiece Coordinates._3_2 Boards.exampleSize6)
+
+[<Fact>]
 let ``Update square with piece`` () =
     let board : board<string, int> = Board.init 6
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.example1 board
