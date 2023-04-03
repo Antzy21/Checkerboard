@@ -4,24 +4,24 @@ open Checkerboard
 
 module Coordinates =
     
-    let _5_0 = (5,0)
+    let _4_0 = (4,0)
     let _3_2 = (3,2)
     let _0_0 = (0,0)
 
 module Pieces =
     
-    let example1 = "Piece1ofStringType"
-    let example2 = "Piece2ofStringType"
+    let exampleA = "Piece1ofStringType"
+    let exampleB = "Piece2ofStringType"
 
 module Moves =
 
     let example1 =
-        {piece = Some Pieces.example1; coordinates = Coordinates._3_2},
-        {piece = None; coordinates = Coordinates._5_0}
+        {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2},
+        {piece = None; coordinates = Coordinates._4_0}
 
     let example2 =
-        {piece = Some Pieces.example1; coordinates = Coordinates._3_2},
-        {piece = Some Pieces.example2; coordinates = Coordinates._5_0}
+        {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2},
+        {piece = Some Pieces.exampleB; coordinates = Coordinates._4_0}
 
 
 module Boards = 
