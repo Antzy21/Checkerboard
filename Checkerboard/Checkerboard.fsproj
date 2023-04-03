@@ -14,9 +14,9 @@
     <RepositoryUrl>https://github.com/Antzy21/Checkerboard</RepositoryUrl>
     <PackageTags>Checkerboard; checkers; chess; board;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
-    <PackageReleaseNotes>Add "containsPiece" function on Board module. Change Create module into init function, and move "applyMove" functions out of update module.</PackageReleaseNotes>
+    <PackageReleaseNotes>Significant memory improvements</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
