@@ -45,6 +45,46 @@ module Board =
             if isOnBoard newCoordinates board then
                 Some <| fromCoordinates newCoordinates board
             else None        
+            
+    module GetCoordinates =
+        let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : coordinates<'Size> list =
+            shifts
+            |> Coordinates.getAfterShifts start
+            |> Seq.toList
+            |> filterCoordinatesOnboard board
+        let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            let isNotOnBoard = fun coords -> isOnBoard coords board |> not
+            Coordinates.afterRepeatedShift isNotOnBoard shift start
+        let rec afterRepeatedShiftWithStopper (shift: 'Size * 'Size) (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            let stopperFunction coords = 
+                GetSquare.fromCoordinatesOption coords board
+                |> Option.map stopAt
+                |> Option.defaultValue true // If None, then coords are out of board, so stop
+            Coordinates.afterRepeatedShift stopperFunction shift start
+        let getAfterShiftInAllDirections (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            Coordinates.getAfterShiftInAllDirections shift start
+            |> Seq.toList
+            |> filterCoordinatesOnboard board
+        let adjacent (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            Coordinates.getAdjacentCoordinates start
+            |> Seq.toList
+            |> filterCoordinatesOnboard board
+        let onDiagonals (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            Coordinates.getDiagonallyAdjacentCoordinates start
+            |> Seq.toList
+            |> List.map (fun direction -> 
+                afterRepeatedShiftWithStopper direction start stopAt board
+            )
+            |> List.reduce List.append
+        let onRowAndFile (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            Coordinates.getOrthogonalAdjacentCoordinates start
+            |> Seq.toList
+            |> List.map (fun direction -> 
+                afterRepeatedShiftWithStopper direction start stopAt board
+            )
+            |> List.reduce List.append
+        let onRowFileAndDiagonals (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
+            List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)
 
     module GetSquares =
         let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
@@ -52,9 +92,9 @@ module Board =
             |> List.map (fun coordinates -> GetSquare.fromCoordinates coordinates board) 
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : square<'Piece, 'Size> list =
             shifts
-            |> List.map (fun shift -> GetSquare.afterShift shift start board)
-            |> List.filter Option.isSome
-            |> List.map Option.get
+            |> GetCoordinates.afterShifts start board
+            |> Seq.toList
+            |> fun coords -> fromCoordinates coords board
         let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             match GetSquare.afterShift shift start board with
             | None -> []
