@@ -22,6 +22,13 @@ module Board =
         board.[i,j].piece
         |> Option.isSome
 
+    /// Returns a new collection containing only the coordinates<'Size> that are on the board
+    let private filterCoordinatesOnboard (board: board<'Piece, 'Size>) (coordinatesList: coordinates<'Size> list) : coordinates<'Size> list =
+        coordinatesList
+        |> List.filter (fun coords ->
+            isOnBoard coords board
+        )
+
     module GetSquare =
         let fromCoordinatesOption (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
             let (i,j) = Coordinates.createTruncating c
