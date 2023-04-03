@@ -26,7 +26,7 @@ let ``Apply move to board`` () =
     Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
     Board.applyMove Moves.example2 board
     Assert.Equal(board.[3,2], {piece = None; coordinates = Coordinates._3_2})
-    Assert.Equal(board.[5,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
+    Assert.Equal(board.[4,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
     
 [<Fact>]
 let ``Apply capture move to board`` () =
@@ -35,7 +35,7 @@ let ``Apply capture move to board`` () =
     Board.Update.Square.withPiece Coordinates._4_0 Pieces.exampleB board
     Board.applyMove Moves.example1 board
     Assert.Equal(board.[3,2], {piece = None; coordinates = Coordinates._3_2})
-    Assert.Equal(board.[5,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
+    Assert.Equal(board.[4,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
     
 [<Fact>]
 let ``Undo move on board`` () =
@@ -44,7 +44,7 @@ let ``Undo move on board`` () =
     Board.applyMove Moves.example1 board
     Board.undoMove Moves.example1 board
     Assert.Equal(board.[3,2], {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2})
-    Assert.Equal(board.[5,0], {piece = None; coordinates = Coordinates._4_0})
+    Assert.Equal(board.[4,0], {piece = None; coordinates = Coordinates._4_0})
     
 [<Fact>]
 let ``Undo capture move on board`` () =
@@ -53,5 +53,5 @@ let ``Undo capture move on board`` () =
     Board.applyMove Moves.example2 board
     Board.undoMove Moves.example2 board
     Assert.Equal(board.[3,2], {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2})
-    Assert.Equal(board.[5,0], {piece = Some Pieces.exampleB; coordinates = Coordinates._4_0})
+    Assert.Equal(board.[4,0], {piece = Some Pieces.exampleB; coordinates = Coordinates._4_0})
 
