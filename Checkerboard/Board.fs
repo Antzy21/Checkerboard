@@ -30,20 +30,20 @@ module Board =
         )
 
     module GetSquare =
-        let fromCoordinatesOption (c: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
-            let (i,j) = Coordinates.createTruncating c
+        let fromCoordinatesOption (board: board<'Piece, 'Size>) (coords: coordinates<'Size>) : square<'Piece, 'Size> option =
+            let (i,j) = Coordinates.createTruncating coords
             Array2D.tryGet (int(i), int(j)) board
-        let fromCoordinatesResult ((i, j): coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> result =
-            fromCoordinatesOption (i, j) board |> Result.fromOption $"Coordinates ({i}, {j}) are not on the board."
-        let fromCoordinates ((i, j): coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
-            fromCoordinatesResult (i, j) board |> Result.failOnError
-        let fromCoordinatesName (name: string) : board<'Piece, 'Size> -> square<'Piece, 'Size> =
+        let fromCoordinatesResult (board: board<'Piece, 'Size>) ((i, j): coordinates<'Size>) : square<'Piece, 'Size> result =
+            fromCoordinatesOption board (i, j) |> Result.fromOption $"Coordinates ({i}, {j}) are not on the board."
+        let fromCoordinates (board: board<'Piece, 'Size>) (coords: coordinates<'Size>) : square<'Piece, 'Size> =
+            fromCoordinatesResult board coords |> Result.failOnError
+        let fromCoordinatesName (name: string)  (board: board<'Piece, 'Size>) : square<'Piece, 'Size> =
             Coordinates.parse name
-            |> fromCoordinates
+            |> fromCoordinates board
         let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
             let newCoordinates = Coordinates.getAfterShift shift start
             if isOnBoard newCoordinates board then
-                Some <| fromCoordinates newCoordinates board
+                Some <| fromCoordinates board newCoordinates
             else None
             
     module GetCoordinates =
@@ -57,7 +57,7 @@ module Board =
             Coordinates.afterRepeatedShift isNotOnBoard shift start
         let rec afterRepeatedShiftWithStopper (shift: 'Size * 'Size) (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             let stopperFunction coords = 
-                GetSquare.fromCoordinatesOption coords board
+                GetSquare.fromCoordinatesOption board coords
                 |> Option.map stopAt
                 |> Option.defaultValue true // If None, then coords are out of board, so stop
             Coordinates.afterRepeatedShift stopperFunction shift start
@@ -69,7 +69,7 @@ module Board =
     module GetSquares =
         let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             coordinatesList
-            |> List.map (fun coordinates -> GetSquare.fromCoordinates coordinates board) 
+            |> List.map (GetSquare.fromCoordinates board) 
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : square<'Piece, 'Size> list =
             shifts
             |> GetCoordinates.afterShifts start board
@@ -144,7 +144,7 @@ module Board =
         
     module GetPiece =
         let fromCoordinates (coordinates: coordinates<'Size>) (board: board<'Piece, 'Size>) : 'Piece option =
-            GetSquare.fromCoordinates coordinates board
+            GetSquare.fromCoordinates board coordinates
             |> fun sqr -> sqr.piece
         let fromCoordinatesName (name: string) : board<'Piece, 'Size> -> 'Piece option =
             Coordinates.parse name
