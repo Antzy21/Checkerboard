@@ -44,7 +44,7 @@ module Board =
             let newCoordinates = Coordinates.getAfterShift shift start
             if isOnBoard newCoordinates board then
                 Some <| fromCoordinates newCoordinates board
-            else None        
+            else None
             
     module GetCoordinates =
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : coordinates<'Size> list =
@@ -65,27 +65,7 @@ module Board =
             Coordinates.getAfterShiftInAllDirections shift start
             |> Seq.toList
             |> filterCoordinatesOnboard board
-        let adjacent (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
-            Coordinates.getAdjacentCoordinates start
-            |> Seq.toList
-            |> filterCoordinatesOnboard board
-        let onDiagonals (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
-            Coordinates.getDiagonallyAdjacentCoordinates start
-            |> Seq.toList
-            |> List.map (fun direction -> 
-                afterRepeatedShiftWithStopper direction start stopAt board
-            )
-            |> List.reduce List.append
-        let onRowAndFile (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
-            Coordinates.getOrthogonalAdjacentCoordinates start
-            |> Seq.toList
-            |> List.map (fun direction -> 
-                afterRepeatedShiftWithStopper direction start stopAt board
-            )
-            |> List.reduce List.append
-        let onRowFileAndDiagonals (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
-            List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)
-
+        
     module GetSquares =
         let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
             coordinatesList
