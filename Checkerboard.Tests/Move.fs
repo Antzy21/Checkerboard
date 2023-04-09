@@ -1,20 +1,26 @@
-﻿module Move
+﻿namespace Move
 
 open Checkerboard
 open Helpers.Data
 open Xunit
 
-[<Fact>]
-let ``getShift`` () =
-    let result = Move.getShift Moves.example1
-    Assert.Equal((1, -2), result)
+module getShift =
+
+    [<Fact>]
+    let ``(3,2)->(4,0)=>(1,-2)`` () =
+        let result = Move.getShift Moves.example1
+        Assert.Equal((1, -2), result)
     
-[<Fact>]
-let ``getMovedPiece`` () =
-    let result = Move.getMovedPiece Moves.example1
-    Assert.Equal(Pieces.exampleA, result)
+module getMovedPiece =
     
-[<Fact>]
-let ``getDestinationPiece`` () =
-    let result = Move.getPieceAtDestination Moves.example2
-    Assert.Equal(Some Pieces.exampleB, result)
+    [<Fact>]
+    let ``Is correct piece on board`` () =
+        let result = Move.getMovedPiece Moves.example1
+        Assert.Equal(Pieces.exampleA, result)
+    
+module getDestinationPiece =
+
+    [<Fact>]
+    let ``Is correct option type of piece`` () =
+        let result = Move.getPieceAtDestination Moves.example2
+        Assert.Equal(Some Pieces.exampleB, result)
