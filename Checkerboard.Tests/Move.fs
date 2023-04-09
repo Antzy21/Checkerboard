@@ -1,4 +1,4 @@
-﻿module Tests.Move
+﻿module Move
 
 open Checkerboard
 open Helpers.Data

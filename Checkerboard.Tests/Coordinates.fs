@@ -1,6 +1,5 @@
-module Tests.Coordinates
+module Coordinates
 
-open System
 open Checkerboard
 open Xunit
 

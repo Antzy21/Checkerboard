@@ -1,4 +1,4 @@
-﻿module Tests.Board
+﻿module Board
 
 open Checkerboard
 open Helpers.Data
