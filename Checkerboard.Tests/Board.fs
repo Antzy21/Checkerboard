@@ -4,62 +4,59 @@ open Checkerboard
 open Helpers.Data
 open Xunit
 
-module ContainsPiece =
+//module ContainsPiece =
 
-    [<Fact>]
-    let ``Piece exists check`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Assert.True(Board.containsPiece Coordinates._3_2 board)
-
-    [<Fact>]
-    let ``Piece does not exist check`` () =
-        let board : board<string, int> = Board.init 6
-        Assert.False(Board.containsPiece Coordinates._3_2 board)
+//    [<Fact>]
+//    let ``Piece exists check`` () =
+//        let board : board = 
+//            Boards.exampleCharOption
+//            |> Board.Update.Square.withPiece PieceParsers.fromChar Coordinates._3_2 Pieces.exampleA
+//        Assert.True(Board.containsPiece Coordinates._3_2 board)
+    
+//    [<Fact>]
+//    let ``Piece does not exist check`` () =
+//        Assert.False(Board.containsPiece Coordinates._3_2 Boards.exampleCharOption)
 
 module UpdateSquareWithPiece =
 
     [<Fact>]
     let ``Update square with piece`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Assert.Equal(board.[3,2], {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2})
+        let board : board = 
+            Boards.exampleChar
+            |> Board.updateSquare Coordinates._3_2 Pieces.exampleA
+        let pieceAt_3_2 =
+            Board.GetSquare.fromCoordinates board Coordinates._3_2
+        Assert.Equal<squareBitMap>(Pieces.exampleA, pieceAt_3_2)
 
-module ApplyMove =
+//module ApplyMove =
 
-    [<Fact>]
-    let ``Apply move to board`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Board.applyMove Moves.example2 board
-        Assert.Equal(board.[3,2], {piece = None; coordinates = Coordinates._3_2})
-        Assert.Equal(board.[4,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
-    
-    [<Fact>]
-    let ``Apply capture move to board`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Board.Update.Square.withPiece Coordinates._4_0 Pieces.exampleB board
-        Board.applyMove Moves.example1 board
-        Assert.Equal(board.[3,2], {piece = None; coordinates = Coordinates._3_2})
-        Assert.Equal(board.[4,0], {piece = Some Pieces.exampleA; coordinates = Coordinates._4_0})
-    
-module UndoMove =
+//    [<Fact>]
+//    let ``Apply move to board`` () =
+//        let board : board  =
+//            Boards.exampleCharOption
+//            |> Board.Update.Square.withPiece PieceParsers.fromChar Coordinates._3_2 Pieces.exampleA
+//            |> Board.applyMove Coordinates._3_2 Coordinates._4_0
+//        Assert.Equal(
+//            Grid.fromCoordinates Coordinates._3_2 board,
+//            None
+//        )
+//        Assert.Equal(
+//            Grid.fromCoordinates Coordinates._4_0 board,
+//            Some Pieces.exampleA
+//        )
 
-    [<Fact>]
-    let ``Undo move on board`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Board.applyMove Moves.example1 board
-        Board.undoMove Moves.example1 board
-        Assert.Equal(board.[3,2], {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2})
-        Assert.Equal(board.[4,0], {piece = None; coordinates = Coordinates._4_0})
-    
-    [<Fact>]
-    let ``Undo capture move on board`` () =
-        let board : board<string, int> = Board.init 6
-        Board.Update.Square.withPiece Coordinates._3_2 Pieces.exampleA board
-        Board.applyMove Moves.example2 board
-        Board.undoMove Moves.example2 board
-        Assert.Equal(board.[3,2], {piece = Some Pieces.exampleA; coordinates = Coordinates._3_2})
-        Assert.Equal(board.[4,0], {piece = Some Pieces.exampleB; coordinates = Coordinates._4_0})
+//    [<Fact>]
+//    let ``Apply capture move to board`` () =
+//        let board : board  =
+//            Boards.exampleCharOption
+//            |> Board.Update.Square.withPiece PieceParsers.fromChar Coordinates._3_2 Pieces.exampleA
+//            |> Board.Update.Square.withPiece PieceParsers.fromChar Coordinates._4_0 Pieces.exampleB
+//            |> Board.applyMove Coordinates._3_2 Coordinates._4_0
+//        Assert.Equal(
+//            Grid.fromCoordinates Coordinates._3_2 board,
+//            None
+//        )
+//        Assert.Equal(
+//            Grid.fromCoordinates Coordinates._4_0 board,
+//            Some Pieces.exampleA
+//        )

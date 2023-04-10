@@ -3,7 +3,7 @@
 This library is for creating, modifying and accessing a checkerboard.
 A checkerboard is a 2D board of squares, and games that use a checkerboard typically have pieces that are placed in the squares available. e.g. Chess and Checkers.
 Checkerboard is written functionally in F# and does not rely on external packages.
-Version 3.0 is designed for memory efficiency, by storing the 2d grid as a collection of binary integers.
+Version 3.0 is designed for memory efficiency, by storing the 2d board as a collection of binary integers.
 
 ## Types and Modules
 

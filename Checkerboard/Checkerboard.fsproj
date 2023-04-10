@@ -21,8 +21,8 @@
 
   <ItemGroup>
     <Compile Include="Coordinates.fs" />
-    <Compile Include="Square.fs" />
-    <Compile Include="Move.fs" />
+    <Compile Include="Parsers.fs" />
+    <Compile Include="BitMap.fs" />
     <Compile Include="Board.fs" />
   </ItemGroup>
 
