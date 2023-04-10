@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FSharp.Extensions\FSharp.Extensions.fsproj" />
+    <PackageReference Include="Antzy21.FSharp.Extensions" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
