@@ -42,6 +42,21 @@ The coordinates type is a tuple of ints.
 
 ```type coordinates = int * int```
 
-The Coordinates module can parse rank and file naming convention into coordinates.
+## Module Functions:
 
-e.g. "a1" = (0, 0), "c4" = (2, 3)
+# getFile
+Returns the corresponding file (column) as a string, represented by a letter of the alphabet.
+
+# getRow
+Returns the corresponding row numeric value as a string.
+
+# getName
+Returns the corresponding name as a string, which is the concatenation of the file and row.
+
+# parse
+Takes a string representation of a coordinate name and returns a coordinates<'Size> value.
+The string must be in the format "[file][row]", where the file is a letter of the alphabet and the row is a number.
+
+# tryParse
+Converts the string representation of some coordinates into a coordinates type.
+The return value is some optional coordinates.
