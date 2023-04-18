@@ -54,14 +54,14 @@ module Board =
         let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             let isNotOnBoard = fun coords -> isOnBoard coords board |> not
             Coordinates.afterRepeatedShift isNotOnBoard shift start
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         let rec afterRepeatedShiftWithStopper (shift: 'Size * 'Size) (start: coordinates<'Size>) (stopAt: square<'Piece, 'Size> -> bool) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             let stopperFunction coords = 
                 GetSquare.fromCoordinatesOption board coords
                 |> Option.map stopAt
                 |> Option.defaultValue true // If None, then coords are out of board, so stop
             Coordinates.afterRepeatedShift stopperFunction shift start
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         let getAfterShiftInAllDirections (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
