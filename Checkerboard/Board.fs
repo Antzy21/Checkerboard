@@ -22,13 +22,6 @@ module Board =
         board.[i,j].piece
         |> Option.isSome
 
-    /// Returns a new collection containing only the coordinates<'Size> that are on the board
-    let private filterCoordinatesOnboard (board: board<'Piece, 'Size>) (coordinatesList: coordinates<'Size> list) : coordinates<'Size> list =
-        coordinatesList
-        |> List.filter (fun coords ->
-            isOnBoard coords board
-        )
-
     module GetSquare =
         let fromCoordinatesOption (board: board<'Piece, 'Size>) (coords: coordinates<'Size>) : square<'Piece, 'Size> option =
             let (i,j) = Coordinates.createTruncating coords
@@ -42,16 +35,22 @@ module Board =
             |> fromCoordinates board
         let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
             let newCoordinates = Coordinates.getAfterShift shift start
-            if isOnBoard newCoordinates board then
-                Some <| fromCoordinates board newCoordinates
-            else None
+            fromCoordinatesOption board newCoordinates
             
     module GetCoordinates =
+
+        /// Returns a new collection containing only the coordinates<'Size> that are on the board
+        let onBoard (board: board<'Piece, 'Size>) (coordinatesList: coordinates<'Size> list) : coordinates<'Size> list =
+            coordinatesList
+            |> List.filter (fun coords ->
+                isOnBoard coords board
+            )
+
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : coordinates<'Size> list =
             shifts
             |> Coordinates.getAfterShifts start
             |> Seq.toList
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             let isNotOnBoard = fun coords -> isOnBoard coords board |> not
             Coordinates.afterRepeatedShift isNotOnBoard shift start
@@ -66,7 +65,7 @@ module Board =
         let getAfterShiftInAllDirections (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         
     module GetSquares =
         let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
@@ -114,36 +113,7 @@ module Board =
                     (-y,-x)
                 ]
             |> afterShifts start board
-        
-        let adjacent (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [
-                ('Size.Zero,'Size.One);
-                ('Size.One,'Size.One);
-                ('Size.One,'Size.Zero);
-                ('Size.One,-'Size.One);
-                ('Size.Zero,-'Size.One);
-                (-'Size.One,'Size.Zero);
-                (-'Size.One,-'Size.One);
-                (-'Size.One,'Size.One)]
-            |> afterShifts start board
-        let onDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [
-                (-'Size.One,'Size.One); 
-                ('Size.One,'Size.One);
-                (-'Size.One,-'Size.One);
-                ('Size.One,-'Size.One)
-            ]
-            |> List.fold (fun s direction ->
-                s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece, 'Size>>
-        let onRowAndFile (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [('Size.One,'Size.Zero); (-'Size.One,'Size.Zero); ('Size.Zero,'Size.One); ('Size.Zero,-'Size.One)]
-            |> List.fold (fun s direction ->
-                s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece, 'Size>>
-        let onRowFileAndDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)            
-        
+
     module GetPiece =
         let fromCoordinates (coordinates: coordinates<'Size>) (board: board<'Piece, 'Size>) : 'Piece option =
             GetSquare.fromCoordinates board coordinates
