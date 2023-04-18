@@ -22,13 +22,6 @@ module Board =
         board.[i,j].piece
         |> Option.isSome
 
-    /// Returns a new collection containing only the coordinates<'Size> that are on the board
-    let private filterCoordinatesOnboard (board: board<'Piece, 'Size>) (coordinatesList: coordinates<'Size> list) : coordinates<'Size> list =
-        coordinatesList
-        |> List.filter (fun coords ->
-            isOnBoard coords board
-        )
-
     module GetSquare =
         let fromCoordinatesOption (board: board<'Piece, 'Size>) (coords: coordinates<'Size>) : square<'Piece, 'Size> option =
             let (i,j) = Coordinates.createTruncating coords
@@ -45,11 +38,19 @@ module Board =
             fromCoordinatesOption board newCoordinates
             
     module GetCoordinates =
+
+        /// Returns a new collection containing only the coordinates<'Size> that are on the board
+        let onBoard (board: board<'Piece, 'Size>) (coordinatesList: coordinates<'Size> list) : coordinates<'Size> list =
+            coordinatesList
+            |> List.filter (fun coords ->
+                isOnBoard coords board
+            )
+
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : coordinates<'Size> list =
             shifts
             |> Coordinates.getAfterShifts start
             |> Seq.toList
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         let rec afterRepeatedShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             let isNotOnBoard = fun coords -> isOnBoard coords board |> not
             Coordinates.afterRepeatedShift isNotOnBoard shift start
@@ -64,7 +65,7 @@ module Board =
         let getAfterShiftInAllDirections (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
             Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
-            |> filterCoordinatesOnboard board
+            |> onBoard board
         
     module GetSquares =
         let fromCoordinates (coordinatesList : coordinates<'Size> list) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
