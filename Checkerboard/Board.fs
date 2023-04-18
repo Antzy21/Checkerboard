@@ -114,36 +114,7 @@ module Board =
                     (-y,-x)
                 ]
             |> afterShifts start board
-        
-        let adjacent (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [
-                ('Size.Zero,'Size.One);
-                ('Size.One,'Size.One);
-                ('Size.One,'Size.Zero);
-                ('Size.One,-'Size.One);
-                ('Size.Zero,-'Size.One);
-                (-'Size.One,'Size.Zero);
-                (-'Size.One,-'Size.One);
-                (-'Size.One,'Size.One)]
-            |> afterShifts start board
-        let onDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [
-                (-'Size.One,'Size.One); 
-                ('Size.One,'Size.One);
-                (-'Size.One,-'Size.One);
-                ('Size.One,-'Size.One)
-            ]
-            |> List.fold (fun s direction ->
-                s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece, 'Size>>
-        let onRowAndFile (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            [('Size.One,'Size.Zero); (-'Size.One,'Size.Zero); ('Size.Zero,'Size.One); ('Size.Zero,-'Size.One)]
-            |> List.fold (fun s direction ->
-                s |> List.append (afterRepeatedShift direction start stopAt board)
-            ) List.empty<square<'Piece, 'Size>>
-        let onRowFileAndDiagonals (start: coordinates<'Size>) (stopAt: ('Piece -> bool) option) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> list =
-            List.append (onRowAndFile start stopAt board) (onDiagonals start stopAt board)            
-        
+
     module GetPiece =
         let fromCoordinates (coordinates: coordinates<'Size>) (board: board<'Piece, 'Size>) : 'Piece option =
             GetSquare.fromCoordinates board coordinates
