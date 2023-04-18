@@ -42,9 +42,7 @@ module Board =
             |> fromCoordinates board
         let afterShift (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : square<'Piece, 'Size> option =
             let newCoordinates = Coordinates.getAfterShift shift start
-            if isOnBoard newCoordinates board then
-                Some <| fromCoordinates board newCoordinates
-            else None
+            fromCoordinatesOption board newCoordinates
             
     module GetCoordinates =
         let afterShifts (start: coordinates<'Size>) (board: board<'Piece, 'Size>) (shifts: ('Size*'Size) list) : coordinates<'Size> list =
