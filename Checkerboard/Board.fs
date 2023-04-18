@@ -64,7 +64,7 @@ module Board =
             Coordinates.afterRepeatedShift stopperFunction shift start
             |> filterCoordinatesOnboard board
         let getAfterShiftInAllDirections (shift: 'Size * 'Size) (start: coordinates<'Size>) (board: board<'Piece, 'Size>) : coordinates<'Size> list =
-            Coordinates.getAfterShiftInAllDirections shift start
+            Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
             |> filterCoordinatesOnboard board
         
