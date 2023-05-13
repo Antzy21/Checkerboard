@@ -14,7 +14,6 @@ module Board =
     /// Initialise a board
     let init (squareMapsLength: int) : board =
         List.init squareMapsLength (fun _ -> 0UL)
-            
 
     /// Checks if given coordinates are on the board
     let private isOnBoard ((x, y): coordinates) (board: board) : bool =
@@ -47,11 +46,6 @@ module Board =
             |> Result.bind (fun coords -> 
                 fromCoordinatesResult board coords
             )
-
-        let afterShift (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap option =
-            let newCoordinates = Coordinates.getAfterShift shift start
-            fromCoordinatesOption board newCoordinates
-
 
     module GetCoordinates =
 
