@@ -41,12 +41,6 @@ module Board =
         let fromCoordinates (board: board) (coords: coordinates) : squareBitMap =
             fromCoordinatesResult board coords |> Result.failOnError
 
-        let fromCoordinatesName (name: string) (board: board) : squareBitMap result =
-            Coordinates.parse name
-            |> Result.bind (fun coords -> 
-                fromCoordinatesResult board coords
-            )
-
     module GetCoordinates =
 
         /// Returns a new collection containing only the coordinates<int> that are on the board
