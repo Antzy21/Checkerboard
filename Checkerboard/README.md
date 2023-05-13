@@ -19,29 +19,27 @@ The piece information is stored in pieceTypeMaps, which are deciphered into piec
 
 The Board module contains submodules for creating a board, getting square(s) and updating a board.
 
-### Square
-
-The square type is a record type of an optional generic piece type, and the coordinates it has on a board.
-
-```type square = {piece: 'Piece option; coordinates: INumber * INumber}```
-
-The Square module contains functions for getting its properties, and updating the piece it contains.
-
-### Move
-
-The move type is a tuple of two squares.
-
-```type move<'Piece> = square```
-
-It is useful for representing when a piece moves between two squares.
-The Move module contains functions for getting the pieces on the starting and destination squares, and finding the shift between the two squares.
-
 ### Coordinates
 
 The coordinates type is a tuple of ints.
 
 ```type coordinates = int * int```
 
-The Coordinates module can parse rank and file naming convention into coordinates.
+## Module Functions:
 
-e.g. "a1" = (0, 0), "c4" = (2, 3)
+# getFile
+Returns the corresponding file (column) as a string, represented by a letter of the alphabet.
+
+# getRow
+Returns the corresponding row numeric value as a string.
+
+# getName
+Returns the corresponding name as a string, which is the concatenation of the file and row.
+
+# parse
+Takes a string representation of a coordinate name and returns a coordinates<'Size> value.
+The string must be in the format "[file][row]", where the file is a letter of the alphabet and the row is a number.
+
+# tryParse
+Converts the string representation of some coordinates into a coordinates type.
+The return value is some optional coordinates.

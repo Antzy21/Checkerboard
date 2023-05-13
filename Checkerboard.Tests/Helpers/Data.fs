@@ -4,9 +4,9 @@ open Checkerboard
 
 module Coordinates =
     
-    let _4_0 = (4,0)
-    let _3_2 = (3,2)
-    let _0_0 = (0,0)
+    let _4_0 = struct (4,0)
+    let _3_2 = struct (3,2)
+    let _0_0 = struct (0,0)
 
 
 module PieceParsers =

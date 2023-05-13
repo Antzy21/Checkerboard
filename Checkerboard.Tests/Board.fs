@@ -25,7 +25,7 @@ module UpdateSquareWithPiece =
             Boards.exampleChar
             |> Board.updateSquare Coordinates._3_2 Pieces.exampleA
         let pieceAt_3_2 =
-            Board.GetSquare.fromCoordinates board Coordinates._3_2
+            Board.getSquareFromCoordinates board Coordinates._3_2
         Assert.Equal<squareBitMap>(Pieces.exampleA, pieceAt_3_2)
 
 //module ApplyMove =

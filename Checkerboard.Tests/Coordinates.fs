@@ -8,27 +8,27 @@ module Parse =
     [<Fact>]
     let ``"a1" => (0,0)`` () =
         let result = Coordinates.parse "a1"
-        Assert.Equal(Ok (0, 0), result)
+        Assert.Equal(Ok struct (0, 0), result)
     
     [<Fact>]
     let ``"az1" => (51, 0)`` () =
         let result = Coordinates.parse "az1"
-        Assert.Equal(Ok (51,0), result)
+        Assert.Equal(Ok struct (51,0), result)
 
     [<Fact>]
     let ``"z26" => (25, 25)`` () =
         let result = Coordinates.parse "z26"
-        Assert.Equal(Ok (25, 25), result)
+        Assert.Equal(Ok struct (25, 25), result)
 
     [<Fact>]
     let ``"aa676" => (26,675)`` () =
         let result = Coordinates.parse "aa676"
-        Assert.Equal(Ok (26, 675), result)
+        Assert.Equal(Ok struct (26, 675), result)
 
     [<Fact>]
     let ``"za1" => (676,0)`` () =
         let result = Coordinates.parse "za1"
-        Assert.Equal(Ok (676, 0), result)
+        Assert.Equal(Ok struct (676, 0), result)
     
 module GetFile =
     

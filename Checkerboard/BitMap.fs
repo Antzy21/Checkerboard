@@ -15,29 +15,29 @@ module BitMap =
         i >= 0 && i <= mapSize && j >= 0 && j <= mapSize
 
     /// Is a given read value inside a bitMap
-    let isReadableValue (n: int) : bool =
+    let private isReadableValue (n: int) : bool =
         n >= 0 && n < mapSize*mapSize
          
     let getDimensionFromIntegerType (n: 'N when 'N :> IBinaryInteger<'N>) : int =
         n.GetByteCount() * 8 |> Math.Sqrt |> int
 
-    let getReadPositionFromCoordinatesResult ((i, j): coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int result =
+    let private getReadPositionFromCoordinatesResult ((i, j): coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int result =
         if not <| containsCoordinates (i,j) then
             Error $"The coordinates ({i}, {j}) are not on the bitMap."
         else
             let d = getDimensionFromIntegerType bitMap
             Ok (i*d + j)
-    let getReadPositionFromCoordinates (coords: coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int =
+    let private getReadPositionFromCoordinates (coords: coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int =
         getReadPositionFromCoordinatesResult coords bitMap |> Result.failOnError
 
-    let getCoordinatesFromReadPositionResult (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates result =
+    let private getCoordinatesFromReadPositionResult (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates result =
         if not <| isReadableValue n then
             Error $"The read value {n} is not on the bitMap."
         else
             let d = getDimensionFromIntegerType bitMap
             let i, j = n % mapSize, n / mapSize
             Ok (i, j)
-    let getCoordinatesFromReadPosition (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates =
+    let private getCoordinatesFromReadPosition (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates =
         getCoordinatesFromReadPositionResult n bitMap |> Result.failOnError
 
     let rec getBits (depth: int) (n: 'N when 'N :> IBinaryInteger<'N>) : bool array =

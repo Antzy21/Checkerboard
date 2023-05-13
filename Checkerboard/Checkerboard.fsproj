@@ -14,9 +14,9 @@
     <RepositoryUrl>https://github.com/Antzy21/Checkerboard</RepositoryUrl>
     <PackageTags>Checkerboard; checkers; chess; board;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <VersionPrefix>3.0.0</VersionPrefix>
+    <VersionPrefix>4.0.0</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
-    <PackageReleaseNotes>Significant memory improvements</PackageReleaseNotes>
+    <PackageReleaseNotes>Simplify API</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antzy21.FSharp.Extensions" Version="1.0.3" />
+    <PackageReference Include="Antzy21.FSharp.Extensions" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
