@@ -27,15 +27,6 @@ The square type is a record type of an optional generic piece type, and the coor
 
 The Square module contains functions for getting its properties, and updating the piece it contains.
 
-### Move
-
-The move type is a tuple of two squares.
-
-```type move<'Piece> = square```
-
-It is useful for representing when a piece moves between two squares.
-The Move module contains functions for getting the pieces on the starting and destination squares, and finding the shift between the two squares.
-
 ### Coordinates
 
 The coordinates type is a tuple of ints.
