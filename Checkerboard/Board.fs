@@ -70,6 +70,7 @@ module Board =
         |> Seq.toList
         |> filterForCoordinatesOnBoard board
         
+    /// Creates a copy of the board with the new square data at given coordinates
     let updateSquare (coords: coordinates) (square: squareBitMap) (board: board) : board =
         square
         |> List.mapi (fun i boolVal ->
