@@ -3,7 +3,7 @@
 This library is for creating, modifying and accessing a checkerboard.
 A checkerboard is a 2D board of squares, and games that use a checkerboard typically have pieces that are placed in the squares available. e.g. Chess and Checkers.
 Checkerboard is written functionally in F# and does not rely on external packages.
-Version 3.0 is designed for memory efficiency, by storing the 2d board as a collection of binary integers.
+Versions >= 3.0 are designed for memory efficiency, by storing the 2d board as a collection of binary integers.
 
 ## Types and Modules
 
@@ -17,7 +17,7 @@ The piece information is stored in pieceTypeMaps, which are deciphered into piec
 
 ```type board<'Piece> = {hasPieceMap: uint64; pieceTypeMaps: uint64 list; parser: parser<'Piece>}```
 
-The Board module contains submodules for creating a board, getting square(s) and updating a board.
+The Board module contains functions for creating a board, getting square(s) and updating a board.
 
 ### Coordinates
 
@@ -25,21 +25,21 @@ The coordinates type is a tuple of ints.
 
 ```type coordinates = int * int```
 
-## Module Functions:
+#### Module Functions:
 
-# getFile
+`getFile`
 Returns the corresponding file (column) as a string, represented by a letter of the alphabet.
 
-# getRow
+`getRow`
 Returns the corresponding row numeric value as a string.
 
-# getName
+`getName`
 Returns the corresponding name as a string, which is the concatenation of the file and row.
 
-# parse
+`parse`
 Takes a string representation of a coordinate name and returns a coordinates<'Size> value.
 The string must be in the format "[file][row]", where the file is a letter of the alphabet and the row is a number.
 
-# tryParse
+`tryParse`
 Converts the string representation of some coordinates into a coordinates type.
 The return value is some optional coordinates.
