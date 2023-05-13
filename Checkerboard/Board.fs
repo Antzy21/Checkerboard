@@ -91,12 +91,6 @@ module Board =
             GetCoordinates.afterRepeatedShiftWithStopper shift start stopAt board
             |> fromCoordinates board
 
-        let adjacent (start: coordinates) (board: board) : squareBitMap list =
-            Coordinates.getAdjacentCoordinates start
-            |> Seq.toList
-            |> fun list -> fromCoordinates board list
-
-
     let updateSquare (coords: coordinates) (square: squareBitMap) (board: board) : board =
         square
         |> List.mapi (fun i boolVal ->
