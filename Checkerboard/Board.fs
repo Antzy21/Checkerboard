@@ -69,28 +69,6 @@ module Board =
             |> Seq.toList
             |> onBoard board
         
-    module GetSquares =
-
-        let fromCoordinates (board: board) (coordinatesList : coordinates list) : squareBitMap list =
-            coordinatesList
-            |> List.map (getSquareFromCoordinatesResult board)
-            |> List.filterResults
-
-        let afterShifts (start: coordinates) (board: board) (shifts: (struct (int*int)) list) : squareBitMap list =
-            shifts
-            |> Coordinates.getAfterShifts start
-            |> Seq.toList
-            |> fromCoordinates board
-
-        let rec afterRepeatedShift (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap list =
-            let isNotOnBoard coords = not <| isOnBoard coords board
-            Coordinates.afterRepeatedShift isNotOnBoard shift start
-            |> fromCoordinates board
-
-        let rec afterRepeatedShiftWithStopper (shift: struct (int*int)) (start: coordinates) (stopAt: squareBitMap -> bool) (board: board) : squareBitMap list =
-            GetCoordinates.afterRepeatedShiftWithStopper shift start stopAt board
-            |> fromCoordinates board
-
     let updateSquare (coords: coordinates) (square: squareBitMap) (board: board) : board =
         square
         |> List.mapi (fun i boolVal ->
