@@ -19,14 +19,6 @@ The piece information is stored in pieceTypeMaps, which are deciphered into piec
 
 The Board module contains submodules for creating a board, getting square(s) and updating a board.
 
-### Square
-
-The square type is a record type of an optional generic piece type, and the coordinates it has on a board.
-
-```type square = {piece: 'Piece option; coordinates: INumber * INumber}```
-
-The Square module contains functions for getting its properties, and updating the piece it contains.
-
 ### Coordinates
 
 The coordinates type is a tuple of ints.
