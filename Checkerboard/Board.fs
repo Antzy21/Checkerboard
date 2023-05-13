@@ -91,11 +91,6 @@ module Board =
             GetCoordinates.afterRepeatedShiftWithStopper shift start stopAt board
             |> fromCoordinates board
 
-        let getAfterShiftInAllDirections (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap list =
-            Coordinates.getAfterShiftInAllDirections shift start
-            |> Seq.toList
-            |> fromCoordinates board
-
         let adjacent (start: coordinates) (board: board) : squareBitMap list =
             Coordinates.getAdjacentCoordinates start
             |> Seq.toList
