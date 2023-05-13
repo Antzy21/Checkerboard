@@ -48,7 +48,7 @@ module Board =
                 fromCoordinatesResult board coords
             )
 
-        let afterShift (shift: int * int) (start: coordinates) (board: board) : squareBitMap option =
+        let afterShift (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap option =
             let newCoordinates = Coordinates.getAfterShift shift start
             fromCoordinatesOption board newCoordinates
 
@@ -62,23 +62,23 @@ module Board =
                 isOnBoard coords board
             )
 
-        let afterShifts (start: coordinates<int>) (board: board) (shifts: (int*int) list) : coordinates<int> list =
+        let afterShifts (start: coordinates<int>) (board: board) (shifts: (struct (int*int)) seq) : coordinates<int> list =
             shifts
             |> Coordinates.getAfterShifts start
             |> Seq.toList
             |> onBoard board
-        let rec afterRepeatedShift (shift: int * int) (start: coordinates<int>) (board: board) : coordinates<int> list =
+        let rec afterRepeatedShift (shift: struct (int*int)) (start: coordinates<int>) (board: board) : coordinates<int> list =
             let isNotOnBoard = fun coords -> isOnBoard coords board |> not
             Coordinates.afterRepeatedShift isNotOnBoard shift start
             |> onBoard board
-        let rec afterRepeatedShiftWithStopper (shift: int * int) (start: coordinates<int>) (stopAt: squareBitMap -> bool) (board: board) : coordinates<int> list =
+        let rec afterRepeatedShiftWithStopper (shift: struct (int*int)) (start: coordinates<int>) (stopAt: squareBitMap -> bool) (board: board) : coordinates<int> list =
             let stopperFunction coords = 
                 GetSquare.fromCoordinatesOption board coords
                 |> Option.map stopAt
                 |> Option.defaultValue true // If None, then coords are out of board, so stop
             Coordinates.afterRepeatedShift stopperFunction shift start
             |> onBoard board
-        let getAfterShiftInAllDirections (shift: int * int) (start: coordinates<int>) (board: board) : coordinates<int> list =
+        let getAfterShiftInAllDirections (shift: struct (int*int)) (start: coordinates<int>) (board: board) : coordinates<int> list =
             Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
             |> onBoard board
@@ -90,22 +90,22 @@ module Board =
             |> List.map (GetSquare.fromCoordinatesResult board)
             |> List.filterResults
 
-        let afterShifts (start: coordinates) (board: board) (shifts: (int * int) list) : squareBitMap list =
+        let afterShifts (start: coordinates) (board: board) (shifts: (struct (int*int)) list) : squareBitMap list =
             shifts
             |> Coordinates.getAfterShifts start
             |> Seq.toList
             |> fromCoordinates board
 
-        let rec afterRepeatedShift (shift: int * int) (start: coordinates) (board: board) : squareBitMap list =
+        let rec afterRepeatedShift (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap list =
             let isNotOnBoard coords = not <| isOnBoard coords board
             Coordinates.afterRepeatedShift isNotOnBoard shift start
             |> fromCoordinates board
 
-        let rec afterRepeatedShiftWithStopper (shift: int * int) (start: coordinates) (stopAt: squareBitMap -> bool) (board: board) : squareBitMap list =
+        let rec afterRepeatedShiftWithStopper (shift: struct (int*int)) (start: coordinates) (stopAt: squareBitMap -> bool) (board: board) : squareBitMap list =
             GetCoordinates.afterRepeatedShiftWithStopper shift start stopAt board
             |> fromCoordinates board
 
-        let getAfterShiftInAllDirections (shift: int * int) (start: coordinates) (board: board) : squareBitMap list =
+        let getAfterShiftInAllDirections (shift: struct (int*int)) (start: coordinates) (board: board) : squareBitMap list =
             Coordinates.getAfterShiftInAllDirections shift start
             |> Seq.toList
             |> fromCoordinates board
