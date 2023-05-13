@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antzy21.FSharp.Extensions" Version="1.0.3" />
+    <PackageReference Include="Antzy21.FSharp.Extensions" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
