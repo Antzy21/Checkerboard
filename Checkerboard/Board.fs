@@ -39,35 +39,35 @@ module Board =
     let getSquareFromCoordinates (board: board) (coords: coordinates) : squareBitMap =
         getSquareFromCoordinatesResult board coords |> Result.failOnError
 
-    module GetCoordinates =
+    /// Returns a new collection containing only the coordinates<int> that are on the board
+    let filterForCoordinatesOnBoard (board: board) (coordinatesList: coordinates list) : coordinates list =
+        coordinatesList
+        |> List.filter (fun coords ->
+            isOnBoard coords board
+        )
 
-        /// Returns a new collection containing only the coordinates<int> that are on the board
-        let onBoard (board: board) (coordinatesList: coordinates list) : coordinates list =
-            coordinatesList
-            |> List.filter (fun coords ->
-                isOnBoard coords board
-            )
+    module GetCoordinates =
 
         let afterShifts (start: coordinates<int>) (board: board) (shifts: (struct (int*int)) seq) : coordinates<int> list =
             shifts
             |> Coordinates.getAfterShifts start
             |> Seq.toList
-            |> onBoard board
+            |> filterForCoordinatesOnBoard board
         let rec afterRepeatedShift (shift: struct (int*int)) (start: coordinates<int>) (board: board) : coordinates<int> list =
             let isNotOnBoard = fun coords -> isOnBoard coords board |> not
             Coordinates.afterRepeatedShift isNotOnBoard shift start
-            |> onBoard board
+            |> filterForCoordinatesOnBoard board
         let rec afterRepeatedShiftWithStopper (shift: struct (int*int)) (start: coordinates<int>) (stopAt: squareBitMap -> bool) (board: board) : coordinates<int> list =
             let stopperFunction coords = 
                 getSquareFromCoordinatesOption board coords
                 |> Option.map stopAt
                 |> Option.defaultValue true // If None, then coords are out of board, so stop
             Coordinates.afterRepeatedShift stopperFunction shift start
-            |> onBoard board
+            |> filterForCoordinatesOnBoard board
         let getAfterShiftInAllDirections (shift: struct (int*int)) (start: coordinates<int>) (board: board) : coordinates<int> list =
             Coordinates.getAfterShiftInAllDirections start shift
             |> Seq.toList
-            |> onBoard board
+            |> filterForCoordinatesOnBoard board
         
     let updateSquare (coords: coordinates) (square: squareBitMap) (board: board) : board =
         square
