@@ -19,7 +19,7 @@ module BitMap =
         n >= 0 && n < mapSize*mapSize
          
     let getDimensionFromIntegerType (n: 'N when 'N :> IBinaryInteger<'N>) : int =
-        n.GetByteCount() * 8 |> Math.Sqrt |> int
+        n.GetByteCount() * mapSize |> Math.Sqrt |> int
 
     let private getReadPositionFromCoordinatesResult ((i, j): coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int result =
         if not <| containsCoordinates (i,j) then
@@ -27,18 +27,19 @@ module BitMap =
         else
             let d = getDimensionFromIntegerType bitMap
             Ok (i*d + j)
-    let private getReadPositionFromCoordinates (coords: coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : int =
-        getReadPositionFromCoordinatesResult coords bitMap |> Result.failOnError
+    // Only use if 100% sure it won't error!
+    let private getReadPositionFromCoordinates ((i,j): coordinates) : int =
+        (i*mapSize + j)
 
     let private getCoordinatesFromReadPositionResult (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates result =
         if not <| isReadableValue n then
             Error $"The read value {n} is not on the bitMap."
         else
-            let d = getDimensionFromIntegerType bitMap
             let i, j = n % mapSize, n / mapSize
             Ok (i, j)
+    // Only use if 100% sure it won't error!
     let private getCoordinatesFromReadPosition (n: int) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : coordinates =
-        getCoordinatesFromReadPositionResult n bitMap |> Result.failOnError
+        (n % mapSize, n / mapSize)
 
     let rec getBits (depth: int) (n: 'N when 'N :> IBinaryInteger<'N>) : bool array =
         match depth with
@@ -79,20 +80,17 @@ module BitMap =
     let print (map: bitMap) : unit =
         map |> toString |> String.toBlock |> printfn "%s"
 
-    let readAt (bitMap: 'N when 'N :> IBinaryInteger<'N>) (n: int) : bool result =
-        if not <| isReadableValue n then
-            Error $"The read value {n} is not in the bitMap."
-        else
-            (bitMap, n)
-            |> 'N.RotateRight
-            |> 'N.IsOddInteger
-            |> Ok
+    let private readAt (bitMap: 'N when 'N :> IBinaryInteger<'N>) (n: int) : bool =
+        (bitMap, n)
+        |> 'N.RotateRight
+        |> 'N.IsOddInteger
 
     let getValueAtCoordinatesResult (coords: coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : bool result =
         getReadPositionFromCoordinatesResult coords bitMap
-        |> Result.bind (readAt bitMap) 
+        |> Result.map (readAt bitMap) 
     let getValueAtCoordinates (coords: coordinates) (bitMap: 'N when 'N :> IBinaryInteger<'N>) : bool =
-        getValueAtCoordinatesResult coords bitMap |> Result.failOnError
+        getReadPositionFromCoordinates coords
+        |> readAt bitMap
 
     let getValuesAtCoordinatesList (bitMap: 'N when 'N :> IBinaryInteger<'N>) (coordsList: coordinates list) : bool list =
         coordsList
