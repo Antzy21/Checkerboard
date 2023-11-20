@@ -214,3 +214,18 @@ module Board =
             else
                 accList    
         ) []
+
+    type coordinatesMap = bitMap
+
+    /// Takes in a conditionalBitBoard (e.g. [int.max; 0; 0; int.max; 0])
+    /// Bitwise AND over a map to get the matching parts of each layer
+    /// Bitwise AND reduce each layer to get the parts where all layers match.
+    let filterCoordinatesBitwise (conditionalBitBoard: board) (board: board) : coordinatesMap =
+        board
+        |> List.zip conditionalBitBoard
+        |> List.map (fun (boardMap, condiationalBitMap) ->
+            boardMap &&& condiationalBitMap
+        )
+        |> List.reduce (fun b1 b2 ->
+            b1 &&& b2
+        )
