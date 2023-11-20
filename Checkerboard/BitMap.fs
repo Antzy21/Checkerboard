@@ -131,3 +131,18 @@ module BitMap =
         |> Result.map (fun value ->
             updateValueAtCoordinates (not value) coords bitMap
         )
+
+    let getReadValuesWithPositiveValue (bitMap: 'N when 'N :> IBinaryInteger<'N>): int list =
+        List.unfold (fun (bitMapRotation: 'N, readValue) ->
+            (bitMapRotation, 1)
+            |> 'N.RotateRight
+            |> fun rotation ->
+                if rotation = bitMap then
+                    None
+                elif 'N.IsOddInteger rotation then
+                    Some (Some readValue, (bitMapRotation, readValue+1))
+                else
+                    Some (Some readValue, (bitMapRotation, readValue+1))
+        ) (bitMap, 2)
+        |> List.filterSome
+
