@@ -17,27 +17,20 @@ module Board =
 
     /// Checks if given coordinates are on the board
     let private isOnBoard ((x, y): coordinates) (board: board) : bool =
-        let dim = 
-            board[0]
-            |> BitMap.getDimensionFromIntegerType
-        x >= 0 && x < dim && y >= 0 && y < dim
+        x >= 0 && x < BitMap.mapSize && y >= 0 && y < BitMap.mapSize
         
+    let getSquareFromCoordinates (board: board) ((i,j): coordinates) : squareBitMap =
+        board
+        |> List.map (fun map ->
+            BitMap.getValueAtCoordinates (i,j) map
+        )
+        |> List.filterResults
     let getSquareFromCoordinatesResult (board: board) ((i,j): coordinates) : squareBitMap result =
         if isOnBoard (i,j) board then
-            board
-            |> List.map (fun map ->
-                BitMap.getValueAtCoordinatesResult (i,j) map
-            )
-            |> List.filterResults
+            getSquareFromCoordinates board (i,j)
             |> Ok
         else
             Error $"The coordinates ({i}, {j}) are not on the board."
-
-    let getSquareFromCoordinatesOption (board: board) (coords: coordinates) : squareBitMap option =
-        getSquareFromCoordinatesResult board coords |> Result.toOption
-
-    let getSquareFromCoordinates (board: board) (coords: coordinates) : squareBitMap =
-        getSquareFromCoordinatesResult board coords |> Result.failOnError
 
     /// Returns a new collection containing only the coordinates<int> that are on the board
     let filterForCoordinatesOnBoard (board: board) (coordinatesList: coordinates list) : coordinates list =
@@ -59,9 +52,9 @@ module Board =
 
     let rec getCoordinatesAfterRepeatedShiftWithStopper (shift: struct (int*int)) (start: coordinates<int>) (stopAt: squareBitMap -> bool) (board: board) : coordinates<int> list =
         let stopperFunction coords = 
-            getSquareFromCoordinatesOption board coords
-            |> Option.map stopAt
-            |> Option.defaultValue true // If None, then coords are out of board, so stop
+            getSquareFromCoordinatesResult board coords
+            |> Result.map stopAt
+            |> Result.defaultValue true // If None, then coords are out of board, so stop
         Coordinates.afterRepeatedShift stopperFunction shift start
         |> filterForCoordinatesOnBoard board
 
@@ -74,7 +67,8 @@ module Board =
     let updateSquare (coords: coordinates) (square: squareBitMap) (board: board) : board =
         square
         |> List.mapi (fun i boolVal ->
-            BitMap.updateValueAtCoordinates boolVal coords board[i]
+            BitMap.setValueAtCoordinates boolVal coords board[i]
+            |> Result.failOnError
         )
 
     /// Folds the array, starting in the top left and moving right.

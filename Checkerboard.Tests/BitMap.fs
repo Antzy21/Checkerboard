@@ -60,40 +60,6 @@ module FromString =
         let result = BitMap.fromString 0s "0000000000000100"
         Assert.Equal(Ok 4s, result)
 
-module ToStringBlock =
-
-    [<Fact>]
-    let ``0s => all zeros`` () =
-        let result = BitMap.toStringBlock 0s
-        Assert.Equal("0000\n0000\n0000\n0000\n", result)
-
-    [<Fact>]
-    let ``1s, 2s are correct`` () =
-        let result = BitMap.toStringBlock 1s
-        Assert.Equal("1000\n0000\n0000\n0000\n", result)
-        let result = BitMap.toStringBlock 2s
-        Assert.Equal("0100\n0000\n0000\n0000\n", result)
-
-    [<Fact>]
-    let ``8x8 1`` () =
-        let result = BitMap.toStringBlock 1UL
-        Assert.Equal(BitMapString.stringOf1, result)
-
-    [<Fact>]
-    let ``8x8 maxValue`` () =
-        let result = BitMap.toStringBlock UInt64.MaxValue
-        Assert.Equal(BitMapString.stringOfMaxUInt64, result)
-
-    [<Fact>]
-    let ``4x4 maxValue`` () =
-        let result = BitMap.toStringBlock UInt16.MaxValue
-        Assert.Equal(BitMapString.stringOfMaxUInt16, result)
-
-    [<Fact>]
-    let ``Chess Starting Position`` () =
-        let result = BitMap.toStringBlock BitMapNumbers.startingChessPiecePosition
-        Assert.Equal(BitMapString.startingChessPiecePositions, result)
-
 module Inverses =
 
     [<Property>]
@@ -111,21 +77,21 @@ module GetValueAtCoordinates =
     [<Fact>]
     let ``Coordinates (0,0) is true for 1`` () =
         let result = BitMap.getValueAtCoordinates (0,0) 1
-        Assert.True result
+        Assert.Equal(Ok true, result)
 
     [<Property>]
     let ``0 returns false for all coords`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
         let result = BitMap.getValueAtCoordinates (i,j) 0
-        Assert.False result
+        Assert.Equal(Ok false, result)
 
     [<Property>]
     let ``MaxValue returns true for all 8x8 coords`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
         let result = BitMap.getValueAtCoordinates (i,j) UInt64.MaxValue
-        Assert.True result
+        Assert.Equal(Ok true, result)
 
     // Not relevant for 64 bit int representation
     //[<Property>]
@@ -140,11 +106,11 @@ module GetValueAtCoordinates =
         let j = abs(j_b % 8)
         List.iter (fun i ->
             let result = BitMap.getValueAtCoordinates (i,j) BitMapNumbers.startingChessPiecePosition
-            Assert.True result
+            Assert.Equal(Ok true, result)
         ) [0; 1; 6; 7]
         List.iter (fun i ->
             let result = BitMap.getValueAtCoordinates (i,j) BitMapNumbers.startingChessPiecePosition
-            Assert.False result
+            Assert.Equal(Ok false, result)
         ) [2; 3; 4; 5]
 
     [<Property>]
@@ -152,29 +118,17 @@ module GetValueAtCoordinates =
         let j = abs(j_b % 8)
         List.iter (fun i ->
             let result = BitMap.getValueAtCoordinates (i,j) BitMapNumbers.startingWhitePiecePositions
-            Assert.True result
+            Assert.Equal(Ok true, result)
         ) [0; 1]
         List.iter (fun i ->
             let result = BitMap.getValueAtCoordinates (i,j) BitMapNumbers.startingWhitePiecePositions
-            Assert.False result
+            Assert.Equal(Ok false, result)
         ) [2; 3; 4; 5; 6; 7]
 
-module GetDimensionFromIntegerType =
+module SetValueAtCoordinates =
 
     [<Fact>]
-    let ``int16 square has side length 4`` () =
-        let result = BitMap.getDimensionFromIntegerType 0us
-        Assert.Equal(4, result)
-
-    [<Fact>]
-    let ``int64 square has side length 8`` () =
-        let result = BitMap.getDimensionFromIntegerType 0UL
-        Assert.Equal(8, result)
-
-module UpdateValueAtCoordinates =
-
-    [<Fact>]
-    let ``Update from 0 to 1`` () =
-        let result = BitMap.updateValueAtCoordinates true (0,0) 0UL
-        Assert.Equal(1UL, result)
+    let ``Update from 0 to 1 AT (0,0)`` () =
+        let result = BitMap.setValueAtCoordinates true (0,0) 0UL
+        Assert.Equal(Ok 1UL, result)
 
