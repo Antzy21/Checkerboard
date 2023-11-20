@@ -127,12 +127,13 @@ module GetValueAtCoordinates =
         let result = BitMap.getValueAtCoordinates (i,j) UInt64.MaxValue
         Assert.True result
 
-    [<Property>]
-    let ``MaxValue returns true for all 4x4 coords`` (i_b: int) (j_b: int) =
-        let i = abs(i_b % 4)
-        let j = abs(j_b % 4)
-        let result = BitMap.getValueAtCoordinates (i,j) UInt16.MaxValue
-        Assert.True result
+    // Not relevant for 64 bit int representation
+    //[<Property>]
+    //let ``MaxValue returns true for all 4x4 coords`` (i_b: int) (j_b: int) =
+    //    let i = abs(i_b % 4)
+    //    let j = abs(j_b % 4)
+    //    let result = BitMap.getValueAtCoordinates (i,j) UInt16.MaxValue
+    //    Assert.True result
     
     [<Property>]
     let ``Returns true only for starting chess position 8x8 coords`` (j_b: int) =
