@@ -3,11 +3,20 @@
 open System
 open FSharp.Extensions
 
-type coordinates = coordinates<int>
+[<Struct>]
+type coordinates = 
+    {
+        value: UInt64
+    }
 
 module Coordinates =
 
     let private alphabet = ['a'..'z']
+
+    let construct (i: int) (j: int) : coordinates =
+        if not (i >= 0 && i <= 8 && j >= 0 && j <= 8) then
+            failwith "Invalid coordinates"
+        {value = UInt64.RotateLeft(1UL, (i * 8) + j)}
 
     let private getLetterIndex (c: char) : int result =
         List.tryFindIndex ((=) c) alphabet
@@ -21,11 +30,20 @@ module Coordinates =
             numberToAlphabet ((n/alphabet.Length)-1)
         + string alphabet.[remainder]
 
-    let getFile ((i, _) : coordinates) : string =
-        numberToAlphabet i
+    let getReadValue (c: coordinates) : int = 
+        c.value
+        |> Numerics.BigInteger.Log2
+        |> (int)
 
-    let getRow ((_, j) : coordinates) : string =
-        (j+1).ToString()
+    let getFile (c : coordinates) : string =
+        getReadValue c
+        |> fun i -> i % 8
+        |> numberToAlphabet
+
+    let getRow (c : coordinates) : string =
+        getReadValue c
+        |> fun i -> i / 8
+        |> fun j -> (j+1).ToString()
 
     let getName (coords : coordinates) : string =
         getFile coords + getRow coords
@@ -53,7 +71,7 @@ module Coordinates =
                     )
                 ) 0 chars
             i
-            |> Result.map (fun i -> (i-1, j-1))
+            |> Result.map (fun i -> construct (i-1) (j-1))
         )
 
     let tryParse (name: string) : coordinates option =
