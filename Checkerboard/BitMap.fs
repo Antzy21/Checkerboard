@@ -70,3 +70,7 @@ module BitMap =
 
     let print (map: bitMap) : unit =
         map |> toString |> String.toBlock |> printfn "%s"
+
+    /// Returns true if the bitmap is "on" at given coordinates
+    let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
+        bitMap ||| c.value > 0UL
