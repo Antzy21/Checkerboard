@@ -35,18 +35,17 @@ module Coordinates =
         |> Numerics.BigInteger.Log2
         |> (int)
 
-    let getFile (c : coordinates) : string =
+    let getFile (c : coordinates) : int =
         getReadValue c
         |> fun i -> i % 8
-        |> numberToAlphabet
 
-    let getRow (c : coordinates) : string =
+    let getRow (c : coordinates) : int =
         getReadValue c
         |> fun i -> i / 8
-        |> fun j -> (j+1).ToString()
+        |> fun j -> (j+1)
 
     let getName (coords : coordinates) : string =
-        getFile coords + getRow coords
+        $"{getFile coords}{getRow coords |> numberToAlphabet}"
 
     let parse (name: string) : coordinates result =
         let rowFileSplitIndexResult =
