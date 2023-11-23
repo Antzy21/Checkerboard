@@ -8,10 +8,6 @@ type bitMap = uint64
 
 module BitMap =
 
-    /// Is a given read value inside a bitMap
-    let private isReadableValue (n: int) : bool =
-        n >= 0 && n < 64
-
     let rec private getBits (depth: int) (n: uint64) : bool array =
         match depth with
         | 0 -> [||]
@@ -19,29 +15,6 @@ module BitMap =
             let boolVal = UInt64.IsOddInteger(n)
             let ary = getBits (d-1) <| UInt64.RotateRight(n, 1)
             Array.append ary [|boolVal|]
-
-    let private readAt (bitMap: uint64) (n: int) : bool result =
-        if not <| isReadableValue n then
-            Error $"The read value {n} is not in the bitMap."
-        else
-            (bitMap, n)
-            |> UInt64.RotateRight
-            |> UInt64.IsOddInteger
-            |> Ok
-
-    /// Assumes read position is contained in the bitMap, keep private to ensure this is not incorrectly used.
-    let private updateValueAtReadPosition (value: bool) (readPosition: int) (bitMap: uint64) : UInt64 =
-        (bitMap, readPosition)
-        |> UInt64.RotateRight
-        |> (fun n ->
-            let isOdd = UInt64.IsOddInteger(n)
-            match value, isOdd with
-            | true, true
-            | false, false -> n
-            | true, false -> n+1UL
-            | false, true -> n-1UL
-        )
-        |> fun i -> UInt64.RotateLeft(i, readPosition)
 
     /// Get
     let getValueAtCoordinates (coords: coordinates) (bitMap: uint64) : bool =
