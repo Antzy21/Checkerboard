@@ -13,10 +13,11 @@ module Coordinates =
 
     let private alphabet = ['a'..'z']
 
-    let construct (i: int) (j: int) : coordinates =
+    let construct (i: int) (j: int) : coordinates result =
         if not (i >= 0 && i <= 8 && j >= 0 && j <= 8) then
-            failwith "Invalid coordinates"
-        {value = UInt64.RotateLeft(1UL, (i * 8) + j)}
+            Error "Invalid coordinates"
+        else
+            Ok {value = UInt64.RotateLeft(1UL, (i * 8) + j)}
 
     let private getLetterIndex (c: char) : int result =
         List.tryFindIndex ((=) c) alphabet
@@ -46,6 +47,10 @@ module Coordinates =
 
     let getName (coords : coordinates) : string =
         $"{getFile coords}{getRow coords |> numberToAlphabet}"
+
+    // Shift coordinates by i and j
+    let shift (c: coordinates) (i: int) (j: int) : coordinates result =
+        construct (i + getRow c) (j + getFile c)
 
     let parse (name: string) : coordinates result =
         let rowFileSplitIndexResult =
