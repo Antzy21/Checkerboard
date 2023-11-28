@@ -82,7 +82,7 @@ module GetValueAtCoordinates =
 
     [<Fact>]
     let ``Coordinates (0,0) is true for 1`` () =
-        let c = Coordinates.construct 0 0
+        let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.getValueAtCoordinates c 1UL
         Assert.Equal(true, result)
 
@@ -90,7 +90,7 @@ module GetValueAtCoordinates =
     let ``0 returns false for all coords`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
-        let c = Coordinates.construct i j
+        let c = Coordinates.construct i j |> Result.failOnError
         let result = BitMap.getValueAtCoordinates c 0UL
         Assert.Equal(false, result)
 
@@ -98,7 +98,7 @@ module GetValueAtCoordinates =
     let ``MaxValue returns true for all 8x8 coords`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
-        let c = Coordinates.construct i j
+        let c = Coordinates.construct i j |> Result.failOnError
         let result = BitMap.getValueAtCoordinates c UInt64.MaxValue
         Assert.Equal(true, result)
     
@@ -111,29 +111,29 @@ module GetValueAtCoordinates =
             result)
 
     [<Property>]
-    let ``Returns true only for starting chess position 8x8 coords`` (j_b: int) =
-        let j = abs(j_b % 8)
-        List.iter (fun i ->
-            let c = Coordinates.construct i j
+    let ``Returns true only for starting chess position 8x8 coords`` (randomInt: int) =
+        let i = abs(randomInt % 8)
+        List.iter (fun j ->
+            let c = Coordinates.construct i j |> Result.failOnError
             let result = BitMap.getValueAtCoordinates c BitMapNumbers.startingChessPiecePosition
             Assert.Equal(false, result)
         ) [2; 3; 4; 5]
-        List.iter (fun i ->
-            let c = Coordinates.construct i j
+        List.iter (fun j ->
+            let c = Coordinates.construct i j |> Result.failOnError
             let result = BitMap.getValueAtCoordinates c BitMapNumbers.startingChessPiecePosition
             Assert.Equal(true, result)
         ) [0; 1; 6; 7]
 
     [<Property>]
-    let ``Returns true only for starting chess white position 8x8 coords`` (j_b: int) =
-        let j = abs(j_b % 8)
-        List.iter (fun i ->
-            let c = Coordinates.construct i j
+    let ``Returns true only for starting chess white position 8x8 coords`` (randomInt: int) =
+        let i = abs(randomInt % 8)
+        List.iter (fun j ->
+            let c = Coordinates.construct i j |> Result.failOnError
             let result = BitMap.getValueAtCoordinates c BitMapNumbers.startingWhitePiecePositions
             Assert.Equal(true, result)
         ) [0; 1]
-        List.iter (fun i ->
-            let c = Coordinates.construct i j
+        List.iter (fun j ->
+            let c = Coordinates.construct i j |> Result.failOnError
             let result = BitMap.getValueAtCoordinates c BitMapNumbers.startingWhitePiecePositions
             Assert.Equal(false, result)
         ) [2; 3; 4; 5; 6; 7]
@@ -142,7 +142,7 @@ module SetValueAtCoordinates =
 
     [<Fact>]
     let ``Update from 0 to 1 AT (0,0)`` () =
-        let c = Coordinates.construct 0 0
+        let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.setValueAtCoordinates true c 0UL
         Assert.Equal(1UL, result)
 

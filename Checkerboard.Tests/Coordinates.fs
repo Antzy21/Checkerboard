@@ -2,6 +2,7 @@ namespace Coordinates
 
 open Checkerboard
 open Xunit
+open FSharp.Extensions
 
 module Parse =
 
@@ -24,53 +25,53 @@ module GetFile =
     [<Fact>]
     let ``(0,0) = 'a'`` () =
         let result = 
-            Coordinates.construct 0 0
+            Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getFile
-        Assert.Equal("a", result)
+        Assert.Equal(0, result)
 
     [<Fact>]
     let ``(7,0) = 'h'`` () =
         let result = 
-            Coordinates.construct 7 0
+            Coordinates.construct 7 0 |> Result.failOnError
             |> Coordinates.getFile
-        Assert.Equal("h", result)
+        Assert.Equal(7, result)
 
     [<Fact>]
     let ``(2,4) = 'c'`` () =
         let result = 
-            Coordinates.construct 2 4
+            Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getFile
-        Assert.Equal("c", result)
+        Assert.Equal(2, result)
     
 module GetRow =
     
     [<Fact>]
     let ``(0,0) = "1"`` () =
         let result = 
-            Coordinates.construct 0 0
+            Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getRow
-        Assert.Equal("1", result)
+        Assert.Equal(1, result)
 
     [<Fact>]
     let ``(0,7) = "8"`` () =
         let result = 
-            Coordinates.construct 0 7
+            Coordinates.construct 0 7 |> Result.failOnError
             |> Coordinates.getRow
-        Assert.Equal("8", result)
+        Assert.Equal(8, result)
 
     [<Fact>]
     let ``(2,4) = "5"`` () =
         let result = 
-            Coordinates.construct 2 4
+            Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getRow
-        Assert.Equal("5", result)   
+        Assert.Equal(5, result)   
     
 module GetName =
 
     [<Fact>]
     let ``(0,0) => "a1"`` () =
         let result = 
-            Coordinates.construct 0 0
+            Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getName
         Assert.Equal("a1", result)
     
