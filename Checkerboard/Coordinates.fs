@@ -45,8 +45,10 @@ module Coordinates =
         |> fun i -> i / 8
         |> fun j -> (j+1)
 
+    let getRowLetter = getRow >> numberToAlphabet
+
     let getName (coords : coordinates) : string =
-        $"{getFile coords}{getRow coords |> numberToAlphabet}"
+        $"{getFile coords}{getRowLetter coords}"
 
     // Shift coordinates by i and j
     let shift (c: coordinates) (i: int) (j: int) : coordinates result =
@@ -75,7 +77,7 @@ module Coordinates =
                     )
                 ) 0 chars
             i
-            |> Result.map (fun i -> construct (i-1) (j-1))
+            |> Result.bind (fun i -> construct (i-1) (j-1))
         )
 
     let tryParse (name: string) : coordinates option =
