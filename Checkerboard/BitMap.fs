@@ -1,34 +1,33 @@
 ﻿namespace Checkerboard
 
 open System
-open System.Numerics
 open FSharp.Extensions
 
 type bitMap = uint64        
 
 module BitMap =
 
-    let rec private getBits (depth: int) (n: uint64) : bool array =
+    let rec private getBits (depth: int) (bitMap: bitMap) : bool array =
         match depth with
         | 0 -> [||]
         | d ->
-            let boolVal = UInt64.IsOddInteger(n)
-            let ary = getBits (d-1) <| UInt64.RotateRight(n, 1)
+            let boolVal = UInt64.IsOddInteger(bitMap)
+            let ary = getBits (d-1) <| UInt64.RotateRight(bitMap, 1)
             Array.append ary [|boolVal|]
 
     /// Get
-    let getValueAtCoordinates (coords: coordinates) (bitMap: uint64) : bool =
+    let getValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bool =
         coords.value &&& bitMap > 0UL
 
     // Set
-    let setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: uint64) : UInt64 =
+    let setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: bitMap) : bitMap =
         if value then
             coords.value ||| bitMap
         else
             (~~~ coords.value) ||| bitMap
 
     // Switch
-    let switchValueAtCoordinates (coords: coordinates) (bitMap: uint64) : UInt64 =
+    let switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bitMap =
         coords.value ^^^ bitMap
         
     /// Isolate the coordinates of the positive values in bitMap form
@@ -43,8 +42,8 @@ module BitMap =
                     accRow
         ) []
 
-    let toString (n: uint64) : string =
-        getBits 64 n
+    let toString (bitMap: bitMap) : string =
+        getBits 64 bitMap
         |> Array.map (fun b ->
             match b with
             | true -> "1"
@@ -52,7 +51,7 @@ module BitMap =
         )
         |> String.Concat
 
-    let fromString (initial: uint64) (str : string) : UInt64 result =
+    let fromString (initial: bitMap) (str : string) : bitMap result =
         if str.Length <> 64 then
             Error $"Number of string bits {str.Length} not equal to bit count of Int Type {initial.GetType().ToString()}"
         else
