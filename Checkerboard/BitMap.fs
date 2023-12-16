@@ -24,7 +24,7 @@ module BitMap =
         if value then
             coords.value ||| bitMap
         else
-            (~~~ coords.value) ||| bitMap
+            (~~~ coords.value) &&& bitMap
 
     // Switch
     let switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bitMap =
@@ -72,4 +72,4 @@ module BitMap =
 
     /// Returns true if the bitmap is "on" at given coordinates
     let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
-        bitMap ||| c.value > 0UL
+        bitMap &&& c.value > 0UL
