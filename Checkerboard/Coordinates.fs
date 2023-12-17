@@ -38,17 +38,18 @@ module Coordinates =
 
     let getFile (c : coordinates) : int =
         getReadValue c
-        |> fun i -> i % 8
+        |> fun r -> r % 8
 
     let getRow (c : coordinates) : int =
         getReadValue c
-        |> fun i -> i / 8
-        |> fun j -> (j+1)
+        |> fun r -> r / 8
+
+    let getRowNumber = getRow >> (+) 1 >> string
 
     let getFileLetter = getFile >> numberToAlphabet
 
     let getName (coords : coordinates) : string =
-        $"{getFileLetter coords}{getRow coords}"
+        $"{getFileLetter coords}{getRowNumber coords}"
 
     // Shift coordinates by i and j
     let shift (c: coordinates) (i: int) (j: int) : coordinates result =
