@@ -135,6 +135,14 @@ module Shift =
             Coordinates.construct 0 0 |> Result.failOnError
             |> fun c -> Coordinates.shift c 0 0 |> Result.failOnError
         Assert.Equal({value = 1UL}, result)
+        
+    [<Fact>]
+    let ``Shift (0,1) 0 0 = (0,0)`` () =
+        let coords = Coordinates.construct 0 1 |> Result.failOnError
+        let result = 
+            coords
+            |> fun c -> Coordinates.shift c 0 0 |> Result.failOnError
+        Assert.Equal(coords, result)
 
     [<Fact>]
     let ``Shift (0,0) 1 0 = (1,0)`` () =

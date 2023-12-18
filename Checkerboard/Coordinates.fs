@@ -53,7 +53,7 @@ module Coordinates =
 
     // Shift coordinates by i and j
     let shift (c: coordinates) (i: int) (j: int) : coordinates result =
-        construct (i + getRow c) (j + getFile c)
+        construct (i + getFile c) (j + getRow c)
 
     let parse (name: string) : coordinates result =
         let rowFileSplitIndexResult =
