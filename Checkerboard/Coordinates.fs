@@ -3,11 +3,24 @@
 open System
 open FSharp.Extensions
 
-type coordinates = coordinates<int>
+[<Struct>]
+type coordinates = 
+    {
+        value: UInt64
+    }
+    with override this.ToString() = 
+                let x = Numerics.BigInteger.Log2 this.value |> int
+                string (x % 8) + "," + string (x / 8)
 
 module Coordinates =
 
     let private alphabet = ['a'..'z']
+
+    let construct (i: int) (j: int) : coordinates result =
+        if not (i >= 0 && i < 8 && j >= 0 && j < 8) then
+            Error "Invalid coordinates"
+        else
+            Ok {value = UInt64.RotateLeft(1UL, (j * 8) + i)}
 
     let private getLetterIndex (c: char) : int result =
         List.tryFindIndex ((=) c) alphabet
@@ -21,14 +34,29 @@ module Coordinates =
             numberToAlphabet ((n/alphabet.Length)-1)
         + string alphabet.[remainder]
 
-    let getFile ((i, _) : coordinates) : string =
-        numberToAlphabet i
+    let getReadValue (c: coordinates) : int = 
+        c.value
+        |> Numerics.BigInteger.Log2
+        |> (int)
 
-    let getRow ((_, j) : coordinates) : string =
-        (j+1).ToString()
+    let getFile (c : coordinates) : int =
+        getReadValue c
+        |> fun r -> r % 8
+
+    let getRow (c : coordinates) : int =
+        getReadValue c
+        |> fun r -> r / 8
+
+    let getRowNumber = getRow >> (+) 1 >> string
+
+    let getFileLetter = getFile >> numberToAlphabet
 
     let getName (coords : coordinates) : string =
-        getFile coords + getRow coords
+        $"{getFileLetter coords}{getRowNumber coords}"
+
+    // Shift coordinates by i and j
+    let shift (c: coordinates) (i: int) (j: int) : coordinates result =
+        construct (i + getFile c) (j + getRow c)
 
     let parse (name: string) : coordinates result =
         let rowFileSplitIndexResult =
@@ -53,7 +81,7 @@ module Coordinates =
                     )
                 ) 0 chars
             i
-            |> Result.map (fun i -> (i-1, j-1))
+            |> Result.bind (fun i -> construct (i-1) (j-1))
         )
 
     let tryParse (name: string) : coordinates option =

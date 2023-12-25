@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>Antzy21.Games.Checkerboard</PackageId>
     <Title>Checkerboard</Title>
@@ -21,9 +21,7 @@
 
   <ItemGroup>
     <Compile Include="Coordinates.fs" />
-    <Compile Include="Parsers.fs" />
     <Compile Include="BitMap.fs" />
-    <Compile Include="Board.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,31 +1,45 @@
-# Checkerboard
+# Checkerboard 5.0
 
-This library is for creating, modifying and accessing a checkerboard.
-A checkerboard is a 2D board of squares, and games that use a checkerboard typically have pieces that are placed in the squares available. e.g. Chess and Checkers.
-Checkerboard is written functionally in F# and does not rely on external packages.
-Versions >= 3.0 are designed for memory efficiency, by storing the 2d board as a collection of binary integers.
+This library is for efficient storing of creating, modifying and accessing a checkerboard.
+A checkerboard is an 8x8 board of squares.
+
+Games that use a checkerboard typically have pieces that are placed in the squares available. e.g. Chess and Checkers.
+Checkerboard is written functionally in F#.
 
 ## Types and Modules
 
-The Checkerboard library contains 5 types, each with a module to perform functions on the type.
+The Checkerboard library contains 2 types Coordinates and Bitmap.
+Both types come with a module to perform related functions.
 
-### Board
+### BitMap
 
-The board type is a 2D array of squares of a generic piece type.
-Currently restricted to 8x8, using the unsigned 64 bit int type.
-The piece information is stored in pieceTypeMaps, which are deciphered into pieces using the parser object, stored as part of the board.
+The `bitMap` type is a `UInt64`.
+The idea is to build up a board with layers of `bitMaps` to represent each square with multiple bits, each at the same location within the `UInt64`.
+A 3 layered `bitMap` board can store up to 8 different states of a square on the board.
 
-```type board<'Piece> = {hasPieceMap: uint64; pieceTypeMaps: uint64 list; parser: parser<'Piece>}```
+#### Module Functions:
 
-The Board module contains functions for creating a board, getting square(s) and updating a board.
+Get the bit value as a boolean at given coordinates
+`getValueAtCoordinates (coords: coordinates) (bitMap: uint64)`
+
+Set a given boolean value at given coordinates
+`setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: uint64)`
+
+Switch the bit value at given coordinates
+`switchValueAtCoordinates (coords: coordinates) (bitMap: uint64)`
+
+Isolate the coordinates of the positive values in bitMap form.
+Returns a list of coordinates
+`IsolateValues (bitMap: bitMap)`
 
 ### Coordinates
 
-The coordinates type is a tuple of ints.
-
-```type coordinates = int * int```
+The `coordinates` type is stored as a UInt64
 
 #### Module Functions:
+
+`construct`
+Constructs a coordinates struct from given coordinates
 
 `getFile`
 Returns the corresponding file (column) as a string, represented by a letter of the alphabet.
