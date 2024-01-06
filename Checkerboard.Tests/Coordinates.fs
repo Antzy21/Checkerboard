@@ -19,7 +19,14 @@ module Parse =
             Coordinates.parse "h8"
             |> Result.map Coordinates.getName
         Assert.Equal(Ok "h8", result)
-    
+        
+    [<Fact>]
+    let Parse_BadInput_ReturnsError () =
+        let result = 
+            Coordinates.parse "bad input"
+            |> Result.map Coordinates.getName
+        Assert.True(Result.isError result)
+            
 module GetFile =
     
     [<Fact>]

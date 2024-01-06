@@ -20,8 +20,6 @@ The `coordinates` type plays a vital role within the library, represented as a `
   
 - `parse`: Takes a string representation of a coordinate (in "[file][row]" format, e.g., "a2") and transforms it into a `coordinates` instance.
 
-- `tryParse`: Attempts to parse a string to a `coordinates` instance and returns `Some(coordinates)` if successful, or `None` if unsuccessful.
-
 ### BitMap
 
 The `bitMap` type, essentially a `UInt64`, represents checkerboard states effectively. A checkerboard layer composed of multiple `bitMaps` can denote custom square states over an 8x8 board.

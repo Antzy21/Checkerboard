@@ -11,7 +11,7 @@ type coordinates =
 
 module Coordinates =
 
-    let private alphabet = ['a'..'z']
+    let private alphabet = ['a'..'h']
 
     let internal constructFromValue (v: UInt64) : coordinates =
         {value = v}
@@ -29,18 +29,10 @@ module Coordinates =
         List.tryFindIndex ((=) c) alphabet
         |> Result.fromOption "Char not found in alphabet"
 
-    let rec private numberToAlphabet (n: int) : string =
-        let remainder = n % alphabet.Length
-        if remainder = n then
-            ""
-        else
-            numberToAlphabet ((n/alphabet.Length)-1)
-        + string alphabet.[remainder]
-
     let getReadValue (c: coordinates) : int = 
         c.value
         |> Numerics.BigInteger.Log2
-        |> (int)
+        |> int
 
     let getFile (c : coordinates) : int =
         getReadValue c
@@ -52,7 +44,7 @@ module Coordinates =
 
     let getRowNumber = getRow >> (+) 1 >> string
 
-    let getFileLetter = getFile >> numberToAlphabet
+    let getFileLetter = getFile >> (fun file -> alphabet[file]) >> string
 
     let getName (coords : coordinates) : string =
         $"{getFileLetter coords}{getRowNumber coords}"
@@ -64,7 +56,7 @@ module Coordinates =
     let parse (name: string) : coordinates result =
         let rowFileSplitIndexResult =
             let rowFileSplitIndexOption =
-                Seq.tryFindIndex System.Char.IsDigit name
+                Seq.tryFindIndex Char.IsDigit name
             match rowFileSplitIndexOption with
             | Some rowFileSplitIndex ->
                 Ok rowFileSplitIndex
@@ -73,8 +65,8 @@ module Coordinates =
 
         rowFileSplitIndexResult
         |> Result.bind (fun rowFileSplitIndex ->
-            let chars = name.[..rowFileSplitIndex-1]
-            let num = name.[rowFileSplitIndex..]
+            let chars = name[..rowFileSplitIndex-1]
+            let num = name[rowFileSplitIndex..]
             let j = Int32.Parse num
             let i = 
                 Seq.foldResult (fun acc c ->
@@ -86,7 +78,3 @@ module Coordinates =
             i
             |> Result.bind (fun i -> construct (i-1) (j-1))
         )
-
-    let tryParse (name: string) : coordinates option =
-        parse name
-        |> Result.toOption
