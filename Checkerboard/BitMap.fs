@@ -3,7 +3,7 @@
 open System
 open FSharp.Extensions
 
-type bitMap = uint64        
+type bitMap = UInt64        
 
 module BitMap =
 
@@ -16,19 +16,19 @@ module BitMap =
             Array.append ary [|boolVal|]
 
     /// Get
-    let getValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bool =
-        coords.value &&& bitMap > 0UL
+    let getValueAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
+        c &&& bitMap > 0UL
 
     // Set
-    let setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: bitMap) : bitMap =
+    let setValueAtCoordinates (value: bool) (c: coordinates) (bitMap: bitMap) : bitMap =
         if value then
-            coords.value ||| bitMap
+            c ||| bitMap
         else
-            (~~~ coords.value) &&& bitMap
+            (~~~ c) &&& bitMap
 
     // Switch
-    let switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bitMap =
-        coords.value ^^^ bitMap
+    let switchValueAtCoordinates (c: coordinates) (bitMap: bitMap) : bitMap =
+        c ^^^ bitMap
         
     /// Isolate the coordinates of the positive values in bitMap form
     let isolateValues (bitMap: bitMap) : bitMap list =

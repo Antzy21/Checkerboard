@@ -26,11 +26,11 @@ The `bitMap` type, essentially a `UInt64`, represents checkerboard states effect
 
 #### Module Functions:
 
-- `getValueAtCoordinates (coords: coordinates) (bitMap: bitMap)`: Get the bit value at a specific coordinate from the provided bitmap.
+- `getValueAtCoordinates (c: coordinates) (bitMap: bitMap)`: Get the bit value at a specific coordinate from the provided bitmap.
 
-- `setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: bitMap)`: Sets the designated value at a specific coordinate in the provided bitmap.
+- `setValueAtCoordinates (value: bool) (c: coordinates) (bitMap: bitMap)`: Sets the designated value at a specific coordinate in the provided bitmap.
 
-- `switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap)`: Switches the bit value at a specific coordinate.
+- `switchValueAtCoordinates (c: coordinates) (bitMap: bitMap)`: Switches the bit value at a specific coordinate.
 
 - `isolateValues (bitMap: bitMap)`: Isolates the coordinates of positive values in bitmap format. Returns a list of `bitMaps` where each has a single bit in common with the given bitmap.
 
