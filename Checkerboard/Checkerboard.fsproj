@@ -22,6 +22,7 @@
   <ItemGroup>
     <Compile Include="Coordinates.fs" />
     <Compile Include="BitMap.fs" />
+    <Compile Include="CoordinatesCollection.fs" />
   </ItemGroup>
 
   <ItemGroup>
