@@ -15,7 +15,7 @@ module Append =
     
     [<Fact>]
     let ``Appending value to empty collection results in single item list`` () =
-        let coords = { value = 1UL }
+        let coords = 1UL
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.append coords
@@ -33,7 +33,7 @@ module Append =
 
     [<Fact>]
     let ``Appending Ok value to empty collection results in single item list`` () =
-        let coords = Ok { value = 1UL }
+        let coords = Ok 1UL
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.appendResult coords
@@ -44,7 +44,7 @@ module Remove =
     
     [<Fact>]
     let ``Removing value from a single item list results in empty collection`` () =
-        let coords = { value = 1UL }
+        let coords = 1UL
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.append coords
@@ -56,7 +56,7 @@ module Filter =
     
     [<Fact>]
     let ``Filtering a collection with itself results in the original collection`` () =
-        let coords = { value = 1UL }
+        let coords = 1UL
         let cc =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.append coords

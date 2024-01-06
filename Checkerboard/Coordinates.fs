@@ -3,21 +3,14 @@
 open System
 open FSharp.Extensions
 
-[<Struct>]
-type coordinates = 
-    {
-        value: UInt64
-    }
+type coordinates = UInt64
 
 module Coordinates =
 
     let private alphabet = ['a'..'h']
 
-    let internal constructFromValue (v: UInt64) : coordinates =
-        {value = v}
-
     let internal constructFromReadValue (r: int) : coordinates = 
-        {value = UInt64.RotateLeft(1UL, r)}
+        UInt64.RotateLeft(1UL, r)
 
     let construct (i: int) (j: int) : coordinates result =
         if not (i >= 0 && i < 8 && j >= 0 && j < 8) then
@@ -30,7 +23,7 @@ module Coordinates =
         |> Result.fromOption "Char not found in alphabet"
 
     let getReadValue (c: coordinates) : int = 
-        c.value
+        c
         |> Numerics.BigInteger.Log2
         |> int
 
@@ -46,8 +39,8 @@ module Coordinates =
 
     let getFileLetter = getFile >> (fun file -> alphabet[file]) >> string
 
-    let getName (coords : coordinates) : string =
-        $"{getFileLetter coords}{getRowNumber coords}"
+    let getName (c : coordinates) : string =
+        $"{getFileLetter c}{getRowNumber c}"
 
     // Shift coordinates by i and j
     let shift (c: coordinates) (i: int) (j: int) : coordinates result =

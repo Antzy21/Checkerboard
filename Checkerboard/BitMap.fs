@@ -3,7 +3,7 @@
 open System
 open FSharp.Extensions
 
-type bitMap = uint64        
+type bitMap = UInt64        
 
 module BitMap =
 
@@ -16,30 +16,29 @@ module BitMap =
             Array.append ary [|boolVal|]
 
     /// Get
-    let getValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bool =
-        coords.value &&& bitMap > 0UL
+    let getValueAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
+        c &&& bitMap > 0UL
 
     // Set
-    let setValueAtCoordinates (value: bool) (coords: coordinates) (bitMap: bitMap) : bitMap =
+    let setValueAtCoordinates (value: bool) (c: coordinates) (bitMap: bitMap) : bitMap =
         if value then
-            coords.value ||| bitMap
+            c ||| bitMap
         else
-            (~~~ coords.value) &&& bitMap
+            (~~~ c) &&& bitMap
 
     // Switch
-    let switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap) : bitMap =
-        coords.value ^^^ bitMap
+    let switchValueAtCoordinates (c: coordinates) (bitMap: bitMap) : bitMap =
+        c ^^^ bitMap
         
     /// Isolate the coordinates of the positive values in bitMap form
     let isolateValues (bitMap: bitMap) : bitMap list =
         [0..63]
         |> List.fold (fun accRow i ->
-            (uint64)(2.**i) &&& bitMap
-            |> fun value ->
-                if value > 0UL then
-                    value :: accRow
-                else
-                    accRow
+            let value = uint64 (2.**i)
+            if getValueAtCoordinates value bitMap then
+                value :: accRow
+            else
+                accRow
         ) []
 
     let toString (bitMap: bitMap) : string =
@@ -67,7 +66,3 @@ module BitMap =
                         | _ -> Error $"Invalid character '{c}' in binary string '{str}'"
                 )
             ) (Ok 0UL) str
-
-    /// Returns true if the bitmap is "on" at given coordinates
-    let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
-        bitMap &&& c.value > 0UL

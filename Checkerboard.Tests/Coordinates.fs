@@ -123,13 +123,13 @@ module Construct =
     let ``Construct coordinates at (0,0) results in 1UL`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
-        Assert.Equal({value = 1UL}, result)
+        Assert.Equal(1UL, result)
 
     [<Fact>]
     let ``Construct coordinates at (1,0) results in 2UL`` () =
         let result = 
             Coordinates.construct 1 0 |> Result.failOnError
-        Assert.Equal({value = 2UL}, result)
+        Assert.Equal(2UL, result)
 
 module Shift =
     
@@ -138,7 +138,7 @@ module Shift =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> fun c -> Coordinates.shift c 0 0 |> Result.failOnError
-        Assert.Equal({value = 1UL}, result)
+        Assert.Equal(1UL, result)
 
     [<Fact>]
     let ``Shifting (0,1) by (0,0) gives (0,1)`` () =
@@ -153,7 +153,7 @@ module Shift =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> fun c -> Coordinates.shift c 1 0 |> Result.failOnError
-        Assert.Equal({value = 2UL}, result)
+        Assert.Equal(2UL, result)
 
 module GetName =
 
