@@ -16,11 +16,17 @@ module Coordinates =
 
     let private alphabet = ['a'..'z']
 
+    let internal constructFromValue (v: UInt64) : coordinates =
+        {value = v}
+
+    let internal constructFromReadValue (r: int) : coordinates = 
+        {value = UInt64.RotateLeft(1UL, r)}
+
     let construct (i: int) (j: int) : coordinates result =
         if not (i >= 0 && i < 8 && j >= 0 && j < 8) then
             Error "Invalid coordinates"
         else
-            Ok {value = UInt64.RotateLeft(1UL, (j * 8) + i)}
+            Ok (constructFromReadValue ((j * 8) + i))
 
     let private getLetterIndex (c: char) : int result =
         List.tryFindIndex ((=) c) alphabet
