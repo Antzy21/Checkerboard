@@ -11,6 +11,7 @@
     <Compile Include="Helpers\Data.fs" />
     <Compile Include="BitMap.fs" />
     <Compile Include="Coordinates.fs" />
+    <Compile Include="CoordinatesCollection.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
