@@ -3,48 +3,47 @@ namespace Coordinates
 open Checkerboard
 open Xunit
 open FSharp.Extensions
-
 module Parse =
 
     [<Fact>]
-    let ``"a1" => (0,0)`` () =
+    let ``Parsing "a1" gives (0,0)`` () =
         let result = 
             Coordinates.parse "a1"
             |> Result.map Coordinates.getName
         Assert.Equal(Ok "a1", result)
-    
+
     [<Fact>]
-    let ``"h8" => (7, 7)`` () =
+    let ``Parsing "h8" gives (7,7)`` () =
         let result = 
             Coordinates.parse "h8"
             |> Result.map Coordinates.getName
         Assert.Equal(Ok "h8", result)
-        
+
     [<Fact>]
-    let Parse_BadInput_ReturnsError () =
+    let ``Parsing bad input returns error`` () =
         let result = 
             Coordinates.parse "bad input"
             |> Result.map Coordinates.getName
         Assert.True(Result.isError result)
-            
+
 module GetFile =
     
     [<Fact>]
-    let ``(0,0) = 0`` () =
+    let ``(0,0) file is 0`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getFile
         Assert.Equal(0, result)
 
     [<Fact>]
-    let ``(7,0) = 7`` () =
+    let ``(7,0) file is 7`` () =
         let result = 
             Coordinates.construct 7 0 |> Result.failOnError
             |> Coordinates.getFile
         Assert.Equal(7, result)
 
     [<Fact>]
-    let ``(2,4) = 4`` () =
+    let ``(2,4) file is 2`` () =
         let result = 
             Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getFile
@@ -53,83 +52,81 @@ module GetFile =
 module GetRow =
     
     [<Fact>]
-    let ``(0,0) = 0`` () =
+    let ``(0,0) row is 0`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getRow
         Assert.Equal(0, result)
 
     [<Fact>]
-    let ``(0,7) = 7`` () =
+    let ``(0,7) row is 7`` () =
         let result = 
             Coordinates.construct 0 7 |> Result.failOnError
             |> Coordinates.getRow
         Assert.Equal(7, result)
 
     [<Fact>]
-    let ``(2,4) = 4`` () =
+    let ``(2,4) row is 4`` () =
         let result = 
             Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getRow
-        Assert.Equal(4, result)   
- 
+        Assert.Equal(4, result)
+
 module GetRowNumber =
     
     [<Fact>]
-    let ``(0,0) = "1"`` () =
+    let ``Row number of (0,0) is "1"`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getRowNumber
         Assert.Equal("1", result)
 
     [<Fact>]
-    let ``(0,7) = "8"`` () =
+    let ``Row number of (0,7) is "8"`` () =
         let result = 
             Coordinates.construct 0 7 |> Result.failOnError
             |> Coordinates.getRowNumber
         Assert.Equal("8", result)
 
     [<Fact>]
-    let ``(2,4) = "5"`` () =
+    let ``Row number of (2,4) is "5"`` () =
         let result = 
             Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getRowNumber
-        Assert.Equal("5", result)   
-    
+        Assert.Equal("5", result)
 
 module GetFileLetter =
     
     [<Fact>]
-    let ``(0,0) = "a"`` () =
+    let ``File letter of (0,0) is "a"`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getFileLetter
         Assert.Equal("a", result)
 
     [<Fact>]
-    let ``(7,0) = "h"`` () =
+    let ``File letter of (7,0) is "h"`` () =
         let result = 
             Coordinates.construct 7 0 |> Result.failOnError
             |> Coordinates.getFileLetter
         Assert.Equal("h", result)
 
     [<Fact>]
-    let ``(2,4) = "c"`` () =
+    let ``File letter of (2,4) is "c"`` () =
         let result = 
             Coordinates.construct 2 4 |> Result.failOnError
             |> Coordinates.getFileLetter
         Assert.Equal("c", result)
-    
 module Construct =
-    
+
     [<Fact>]
-    let ``Construct 0 0 = 1UL`` () =
+    let ``Construct coordinates at (0,0) results in 1UL`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
         Assert.Equal({value = 1UL}, result)
-    
+
     [<Fact>]
-    let ``Construct 1 0 = 2UL`` () =
+    let ``Construct coordinates at (1,0) results in 2UL`` () =
         let result = 
             Coordinates.construct 1 0 |> Result.failOnError
         Assert.Equal({value = 2UL}, result)
@@ -137,14 +134,14 @@ module Construct =
 module Shift =
     
     [<Fact>]
-    let ``Shift (0,0) 0 0 = (0,0)`` () =
+    let ``Shifting (0,0) by (0,0) gives (0,0)`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> fun c -> Coordinates.shift c 0 0 |> Result.failOnError
         Assert.Equal({value = 1UL}, result)
-        
+
     [<Fact>]
-    let ``Shift (0,1) 0 0 = (0,0)`` () =
+    let ``Shifting (0,1) by (0,0) gives (0,1)`` () =
         let coords = Coordinates.construct 0 1 |> Result.failOnError
         let result = 
             coords
@@ -152,7 +149,7 @@ module Shift =
         Assert.Equal(coords, result)
 
     [<Fact>]
-    let ``Shift (0,0) 1 0 = (1,0)`` () =
+    let ``Shifting (0,0) by (1,0) gives (1,0)`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> fun c -> Coordinates.shift c 1 0 |> Result.failOnError
@@ -161,7 +158,7 @@ module Shift =
 module GetName =
 
     [<Fact>]
-    let ``(0,0) => "a1"`` () =
+    let ``Getting the name of (0,0) gives "a1"`` () =
         let result = 
             Coordinates.construct 0 0 |> Result.failOnError
             |> Coordinates.getName

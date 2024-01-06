@@ -10,96 +10,94 @@ open FSharp.Extensions
 module ToString =
 
     [<Fact>]
-    let ``0 => 0...000`` () =
+    let ``Given 0UL output is a string of zeros`` () =
         let result = BitMap.toString 0UL
         Assert.Equal("0000000000000000000000000000000000000000000000000000000000000000", result)
 
     [<Fact>]
-    let ``1 => 0...001`` () =
+    let ``Given 1UL output string has last character one`` () =
         let result = BitMap.toString 1UL
         Assert.Equal("0000000000000000000000000000000000000000000000000000000000000001", result)
 
     [<Fact>]
-    let ``2 => 0...010`` () =
+    let ``Given 2UL output string has second last character one`` () =
         let result = BitMap.toString 2UL
         Assert.Equal("0000000000000000000000000000000000000000000000000000000000000010", result)
 
     [<Fact>]
-    let ``3 => 0...011`` () =
+    let ``Given 3UL output string has last two characters one`` () =
         let result = BitMap.toString 3UL
         Assert.Equal("0000000000000000000000000000000000000000000000000000000000000011", result)
 
     [<Fact>]
-    let ``4 => 0...100`` () =
+    let ``Given 4UL output string has third last character one`` () =
         let result = BitMap.toString 4UL
         Assert.Equal("0000000000000000000000000000000000000000000000000000000000000100", result)
 
 module FromString =
 
     [<Fact>]
-    let ``0...000 => 0`` () =
+    let ``String of zeros maps to 0UL`` () =
         let result = 
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000000"
             |> Result.failOnError
         Assert.Equal(0UL, result)
 
     [<Fact>]
-    let ``0...001 => 1`` () =
-        let result = 
+    let ``String with last character one maps to 1UL`` () =
+        let result =
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000001"
             |> Result.failOnError
         Assert.Equal(1UL, result)
 
     [<Fact>]
-    let ``0...010 => 2`` () =
-        let result = 
+    let ``String with second last character one maps to 2UL`` () =
+        let result =
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000010"
             |> Result.failOnError
         Assert.Equal(2UL, result)
 
     [<Fact>]
-    let ``0...011 => 3`` () =
+    let ``String with last two characters one maps to 3UL`` () =
         let result = 
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000011"
             |> Result.failOnError
         Assert.Equal(3UL, result)
 
     [<Fact>]
-    let ``0...100 => 4`` () =
+    let ``String with third last character one maps to 4UL`` () =
         let result = 
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000100"
             |> Result.failOnError
         Assert.Equal(4UL, result)
-        
+
     [<Fact>]
-    let FromString_WithTooShortString_ReturnsError () =
-        let result =
-            BitMap.fromString 0UL ""
+    let ``Too short input string returns error`` () =
+        let result = BitMap.fromString 0UL ""
         Assert.True(Result.isError result)
-        
+
     [<Fact>]
-    let FromString_WithStringOfBadChars_ReturnsError () =
-        let result =
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000002"
+    let ``Input string with bad characters returns error`` () =
+        let result = BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000002"
         Assert.True(Result.isError result)
 
 module Inverses =
 
     [<Property>]
-    let ``UL: toString and fromString`` (n: bitMap) =
+    let ``BitMap toString and fromString are inverses`` (n: bitMap) =
         let result = n |> BitMap.toString |> BitMap.fromString 0UL
         Assert.Equal(Ok n, result)
 
 module GetValueAtCoordinates = 
 
     [<Fact>]
-    let ``Coordinates (0,0) is true for 1`` () =
+    let ``Coordinates (0,0) for 1UL results in true`` () =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.getValueAtCoordinates c 1UL
         Assert.Equal(true, result)
 
     [<Property>]
-    let ``0 returns false for all coords`` (i_b: int) (j_b: int) =
+    let ``Coordinate accessing with an empty bitmap always results in false`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
         let c = Coordinates.construct i j |> Result.failOnError
@@ -107,23 +105,20 @@ module GetValueAtCoordinates =
         Assert.Equal(false, result)
 
     [<Property>]
-    let ``MaxValue returns true for all 8x8 coords`` (i_b: int) (j_b: int) =
+    let ``Coordinate accessing with a full bitmap always results in true`` (i_b: int) (j_b: int) =
         let i = abs(i_b % 8)
         let j = abs(j_b % 8)
         let c = Coordinates.construct i j |> Result.failOnError
         let result = BitMap.getValueAtCoordinates c UInt64.MaxValue
         Assert.Equal(true, result)
-    
+
     [<Fact>]
-    let ``Chess BitMap number is correct`` () =
-        let result = 
-            BitMap.toString BitMapNumbers.startingChessPiecePosition
-        Assert.Equal(
-            "1111111111111111000000000000000000000000000000001111111111111111",
-            result)
+    let ``Starting chess position is correct`` () =
+        let result = BitMap.toString BitMapNumbers.startingChessPiecePosition
+        Assert.Equal("1111111111111111000000000000000000000000000000001111111111111111", result)
 
     [<Property>]
-    let ``Returns true only for starting chess position 8x8 coords`` (randomInt: int) =
+    let ``Starting chess position only gives true for specific coordinates`` (randomInt: int) =
         let i = abs(randomInt % 8)
         List.iter (fun j ->
             let c = Coordinates.construct i j |> Result.failOnError
@@ -137,7 +132,7 @@ module GetValueAtCoordinates =
         ) [0; 1; 6; 7]
 
     [<Property>]
-    let ``Returns true only for starting chess white position 8x8 coords`` (randomInt: int) =
+    let ``Starting white chess position only gives true for specific coordinates`` (randomInt: int) =
         let i = abs(randomInt % 8)
         List.iter (fun j ->
             let c = Coordinates.construct i j |> Result.failOnError
@@ -153,21 +148,21 @@ module GetValueAtCoordinates =
 module SetValueAtCoordinates =
 
     [<Fact>]
-    let ``Update from 0 to 1 AT (0,0)`` () =
+    let ``Update value from 0 to 1 at (0,0)`` () =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.setValueAtCoordinates true c 0UL
         Assert.Equal(1UL, result)
         
     [<Fact>]
-    let ``Update from 1 to 0 AT (0,0)`` () =
+    let ``Update value from 1 to 0 at (0,0)`` () =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.setValueAtCoordinates false c 0UL
         Assert.Equal(0UL, result)
-
+        
 module SwitchValueAtCoordinates =
 
     [<Fact>]
-    let ``Switch at (0,0)`` () =
+    let ``Switch value at (0,0)`` () =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.switchValueAtCoordinates c 0UL
         Assert.Equal(1UL, result)
@@ -175,8 +170,7 @@ module SwitchValueAtCoordinates =
 module IsOnAtCoordinates =
     
     [<Fact>]
-    let IsOnAtCoordinates_CheckAt_0_0_ForEmptyBitmap_ReturnsFalse () =
+    let ``Empty bitmap returns false for IsOnAtCoordinates (0,0)`` () =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.isOnAtCoordinates c 0UL
         Assert.False(result)
-        

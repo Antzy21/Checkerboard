@@ -2,66 +2,60 @@
 
 open Checkerboard
 open Xunit
-
 module Construct =
     
     [<Fact>]
-    let Construct_ByDefault_IsEmptyListOfCoordinates () =
+    let ``Construct gives empty list of coordinates`` () =
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.toList
-            
         Assert.Empty(result)
-        
+
 module Append =
     
     [<Fact>]
-    let Append_ValueToEmptyCollection_ReturnsSingularList () =
+    let ``Appending value to empty collection results in single item list`` () =
         let coords = { value = 1UL }
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.append coords
             |> CoordinatesCollection.toList
-            
         Assert.Single(result)
-        
+
     [<Fact>]
-    let AppendResult_ErrorValueToEmptyCollection_ReturnsEmptyCollection () =
+    let ``Appending Error value to empty collection results in empty collection`` () =
         let coords = Error "No coordinates"
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.appendResult coords
             |> CoordinatesCollection.toList
-            
         Assert.Empty(result)
-        
+
     [<Fact>]
-    let AppendResult_OkValueToEmptyCollection_ReturnsSingularList () =
+    let ``Appending Ok value to empty collection results in single item list`` () =
         let coords = Ok { value = 1UL }
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.appendResult coords
             |> CoordinatesCollection.toList
-            
         Assert.Single(result)
-        
+
 module Remove =
     
     [<Fact>]
-    let Remove_ValueOfSingularList_ReturnsEmptyCollection () =
+    let ``Removing value from a single item list results in empty collection`` () =
         let coords = { value = 1UL }
         let result =
             CoordinatesCollection.construct ()
             |> CoordinatesCollection.append coords
             |> CoordinatesCollection.remove coords
             |> CoordinatesCollection.toList
-            
         Assert.Empty(result)
-        
+    
 module Filter =
     
     [<Fact>]
-    let Filter_ACollectionOnItself_ReturnsItself () =
+    let ``Filtering a collection with itself results in the original collection`` () =
         let coords = { value = 1UL }
         let cc =
             CoordinatesCollection.construct ()
@@ -69,5 +63,4 @@ module Filter =
         let result =
             cc
             |> CoordinatesCollection.filter cc
-            
         Assert.Equal(result, cc)
