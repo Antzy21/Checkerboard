@@ -34,12 +34,11 @@ module BitMap =
     let isolateValues (bitMap: bitMap) : bitMap list =
         [0..63]
         |> List.fold (fun accRow i ->
-            (uint64)(2.**i) &&& bitMap
-            |> fun value ->
-                if value > 0UL then
-                    value :: accRow
-                else
-                    accRow
+            let value = uint64 (2.**i)
+            if getValueAtCoordinates value bitMap then
+                value :: accRow
+            else
+                accRow
         ) []
 
     let toString (bitMap: bitMap) : string =
