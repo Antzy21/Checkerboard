@@ -67,7 +67,3 @@ module BitMap =
                         | _ -> Error $"Invalid character '{c}' in binary string '{str}'"
                 )
             ) (Ok 0UL) str
-
-    /// Returns true if the bitmap is "on" at given coordinates
-    let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
-        bitMap &&& c.value > 0UL

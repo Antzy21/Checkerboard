@@ -112,6 +112,8 @@ module GetValueAtCoordinates =
         let result = BitMap.getValueAtCoordinates c UInt64.MaxValue
         Assert.Equal(true, result)
 
+module ChessExamples =
+    
     [<Fact>]
     let ``Starting chess position is correct`` () =
         let result = BitMap.toString BitMapNumbers.startingChessPiecePosition
@@ -166,11 +168,3 @@ module SwitchValueAtCoordinates =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.switchValueAtCoordinates c 0UL
         Assert.Equal(1UL, result)
-
-module IsOnAtCoordinates =
-    
-    [<Fact>]
-    let ``Empty bitmap returns false for IsOnAtCoordinates (0,0)`` () =
-        let c = Coordinates.construct 0 0 |> Result.failOnError
-        let result = BitMap.isOnAtCoordinates c 0UL
-        Assert.False(result)
