@@ -39,53 +39,53 @@ module FromString =
     [<Fact>]
     let ``String of zeros maps to 0UL`` () =
         let result = 
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000000"
+            BitMap.parse "0000000000000000000000000000000000000000000000000000000000000000"
             |> Result.failOnError
         Assert.Equal(0UL, result)
 
     [<Fact>]
     let ``String with last character one maps to 1UL`` () =
         let result =
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000001"
+            BitMap.parse "0000000000000000000000000000000000000000000000000000000000000001"
             |> Result.failOnError
         Assert.Equal(1UL, result)
 
     [<Fact>]
     let ``String with second last character one maps to 2UL`` () =
         let result =
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000010"
+            BitMap.parse "0000000000000000000000000000000000000000000000000000000000000010"
             |> Result.failOnError
         Assert.Equal(2UL, result)
 
     [<Fact>]
     let ``String with last two characters one maps to 3UL`` () =
         let result = 
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000011"
+            BitMap.parse "0000000000000000000000000000000000000000000000000000000000000011"
             |> Result.failOnError
         Assert.Equal(3UL, result)
 
     [<Fact>]
     let ``String with third last character one maps to 4UL`` () =
         let result = 
-            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000100"
+            BitMap.parse "0000000000000000000000000000000000000000000000000000000000000100"
             |> Result.failOnError
         Assert.Equal(4UL, result)
 
     [<Fact>]
     let ``Too short input string returns error`` () =
-        let result = BitMap.fromString 0UL ""
+        let result = BitMap.parse ""
         Assert.True(Result.isError result)
 
     [<Fact>]
     let ``Input string with bad characters returns error`` () =
-        let result = BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000002"
+        let result = BitMap.parse "0000000000000000000000000000000000000000000000000000000000000002"
         Assert.True(Result.isError result)
 
 module Inverses =
 
     [<Property>]
     let ``BitMap toString and fromString are inverses`` (n: bitMap) =
-        let result = n |> BitMap.toString |> BitMap.fromString 0UL
+        let result = n |> BitMap.toString |> BitMap.parse
         Assert.Equal(Ok n, result)
 
 module GetValueAtCoordinates = 

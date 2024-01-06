@@ -51,9 +51,9 @@ module BitMap =
         )
         |> String.Concat
 
-    let fromString (initial: bitMap) (str : string) : bitMap result =
+    let parse (str : string) : bitMap result =
         if str.Length <> 64 then
-            Error $"Number of string bits {str.Length} not equal to bit count of Int Type {initial.GetType().ToString()}"
+            Error $"Number of string bits {str.Length} not equal to bit count of UInt64"
         else
             Seq.fold (fun accResult (c: char) ->
                 accResult |> Result.bind (fun acc ->
@@ -66,7 +66,7 @@ module BitMap =
                             Ok v
                         | _ -> Error $"Invalid character '{c}' in binary string '{str}'"
                 )
-            ) (Ok initial) str
+            ) (Ok 0UL) str
 
     /// Returns true if the bitmap is "on" at given coordinates
     let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
