@@ -32,7 +32,7 @@ The `bitMap` type, essentially a `UInt64`, represents checkerboard states effect
 
 - `switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap)`: Switches the bit value at a specific coordinate.
 
-- `IsolateValues (bitMap: bitMap)`: Isolates the coordinates of positive values in bitmap format. Returns a list of `bitMaps` where each has a single bit in common with the given bitmap.
+- `isolateValues (bitMap: bitMap)`: Isolates the coordinates of positive values in bitmap format. Returns a list of `bitMaps` where each has a single bit in common with the given bitmap.
 
 ### CoordinatesCollection Module
 

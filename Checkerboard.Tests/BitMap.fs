@@ -70,6 +70,18 @@ module FromString =
             BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000100"
             |> Result.failOnError
         Assert.Equal(4UL, result)
+        
+    [<Fact>]
+    let FromString_WithTooShortString_ReturnsError () =
+        let result =
+            BitMap.fromString 0UL ""
+        Assert.True(Result.isError result)
+        
+    [<Fact>]
+    let FromString_WithStringOfBadChars_ReturnsError () =
+        let result =
+            BitMap.fromString 0UL "0000000000000000000000000000000000000000000000000000000000000002"
+        Assert.True(Result.isError result)
 
 module Inverses =
 
@@ -145,4 +157,26 @@ module SetValueAtCoordinates =
         let c = Coordinates.construct 0 0 |> Result.failOnError
         let result = BitMap.setValueAtCoordinates true c 0UL
         Assert.Equal(1UL, result)
+        
+    [<Fact>]
+    let ``Update from 1 to 0 AT (0,0)`` () =
+        let c = Coordinates.construct 0 0 |> Result.failOnError
+        let result = BitMap.setValueAtCoordinates false c 0UL
+        Assert.Equal(0UL, result)
 
+module SwitchValueAtCoordinates =
+
+    [<Fact>]
+    let ``Switch at (0,0)`` () =
+        let c = Coordinates.construct 0 0 |> Result.failOnError
+        let result = BitMap.switchValueAtCoordinates c 0UL
+        Assert.Equal(1UL, result)
+
+module IsOnAtCoordinates =
+    
+    [<Fact>]
+    let IsOnAtCoordinates_CheckAt_0_0_ForEmptyBitmap_ReturnsFalse () =
+        let c = Coordinates.construct 0 0 |> Result.failOnError
+        let result = BitMap.isOnAtCoordinates c 0UL
+        Assert.False(result)
+        
