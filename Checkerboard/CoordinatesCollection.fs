@@ -12,7 +12,7 @@ module CoordinatesCollection =
 
     let toList (cc: coordinatesCollection) : coordinates List =
         cc
-        |> BitMap.IsolateValues
+        |> BitMap.isolateValues
         |> List.map Coordinates.constructFromValue
 
     let append (c: coordinates) (cc: coordinatesCollection) : coordinatesCollection =

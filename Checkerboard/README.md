@@ -20,8 +20,6 @@ The `coordinates` type plays a vital role within the library, represented as a `
   
 - `parse`: Takes a string representation of a coordinate (in "[file][row]" format, e.g., "a2") and transforms it into a `coordinates` instance.
 
-- `tryParse`: Attempts to parse a string to a `coordinates` instance and returns `Some(coordinates)` if successful, or `None` if unsuccessful.
-
 ### BitMap
 
 The `bitMap` type, essentially a `UInt64`, represents checkerboard states effectively. A checkerboard layer composed of multiple `bitMaps` can denote custom square states over an 8x8 board.
@@ -34,7 +32,7 @@ The `bitMap` type, essentially a `UInt64`, represents checkerboard states effect
 
 - `switchValueAtCoordinates (coords: coordinates) (bitMap: bitMap)`: Switches the bit value at a specific coordinate.
 
-- `IsolateValues (bitMap: bitMap)`: Isolates the coordinates of positive values in bitmap format. Returns a list of `bitMaps` where each has a single bit in common with the given bitmap.
+- `isolateValues (bitMap: bitMap)`: Isolates the coordinates of positive values in bitmap format. Returns a list of `bitMaps` where each has a single bit in common with the given bitmap.
 
 ### CoordinatesCollection Module
 

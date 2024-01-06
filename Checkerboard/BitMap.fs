@@ -31,7 +31,7 @@ module BitMap =
         coords.value ^^^ bitMap
         
     /// Isolate the coordinates of the positive values in bitMap form
-    let IsolateValues (bitMap: bitMap) : bitMap list =
+    let isolateValues (bitMap: bitMap) : bitMap list =
         [0..63]
         |> List.fold (fun accRow i ->
             (uint64)(2.**i) &&& bitMap
@@ -51,24 +51,22 @@ module BitMap =
         )
         |> String.Concat
 
-    let fromString (initial: bitMap) (str : string) : bitMap result =
+    let parse (str : string) : bitMap result =
         if str.Length <> 64 then
-            Error $"Number of string bits {str.Length} not equal to bit count of Int Type {initial.GetType().ToString()}"
+            Error $"Number of string bits {str.Length} not equal to bit count of UInt64"
         else
-            Seq.fold (fun acc (c: char) ->
-                UInt64.RotateLeft(acc, 1)
-                |> fun v ->
-                    match c with
-                    | '1' ->
-                        v + 1UL
-                    | '0' -> 
-                        v
-                    | _ -> failwith $"Invalid character '{c}' in binary string '{str}'"
-            ) initial str
-            |> Ok
-
-    let print (map: bitMap) : unit =
-        map |> toString |> String.toBlock |> printfn "%s"
+            Seq.fold (fun accResult (c: char) ->
+                accResult |> Result.bind (fun acc ->
+                    UInt64.RotateLeft(acc, 1)
+                    |> fun v ->
+                        match c with
+                        | '1' ->
+                            Ok (v + 1UL)
+                        | '0' -> 
+                            Ok v
+                        | _ -> Error $"Invalid character '{c}' in binary string '{str}'"
+                )
+            ) (Ok 0UL) str
 
     /// Returns true if the bitmap is "on" at given coordinates
     let isOnAtCoordinates (c: coordinates) (bitMap: bitMap) : bool =
