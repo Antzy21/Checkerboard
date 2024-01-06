@@ -8,9 +8,6 @@ type coordinates =
     {
         value: UInt64
     }
-    with override this.ToString() = 
-                let x = Numerics.BigInteger.Log2 this.value |> int
-                string (x % 8) + "," + string (x / 8)
 
 module Coordinates =
 
