@@ -12,9 +12,13 @@ The `coordinates` type plays a vital role within the library, represented as a `
 
 - `construct`: Constructs a `coordinates` instance from given row and column values, represented as integers.
 
-- `getFile`: Returns the file (column) of any given `coordinates` type as an alphanumeric character.
+- `getFile`: Returns the file (column) of the `coordinates` instance as a numeric value, based at 0.
 
-- `getRow`: Returns the row of the `coordinates` instance as a numeric value.
+- `getFileLetter`: Returns the file (column) of any given `coordinates` type as an alphanumeric character.
+  
+- `getRow`: Returns the row of the `coordinates` instance as a numeric value, based at 0.
+
+- `getRowNumber`: Returns the row of the `coordinates` instance as a string value, based at 1.
 
 - `getName`: Returns the name of the `coordinates` instance as a string, which is the combination of its file and row.
   
